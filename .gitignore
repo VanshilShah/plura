@@ -68,6 +68,7 @@ typings/
 *.dll
 *.so
 *.dylib
+gin-bin
 
 # Test binary, built with `go test -c`
 *.test
