@@ -1,14 +1,23 @@
 package main
 
 import (
+	"log"
 	"net/http"
 	"os"
 
+	"github.com/VanshilShah/plura/firestore"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	firestore.Init()
 	// Set the router as the default one shipped with Gin
 	router := gin.Default()
 
@@ -23,8 +32,12 @@ func main() {
 				"message": "pong",
 			})
 		})
+		api.GET("/name", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{
+				"name": firestore.GetName(c),
+			})
+		})
 	}
-
 	// Start and run the server
 	port := os.Getenv("PORT")
 	if len(port) == 0 {
