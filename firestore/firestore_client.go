@@ -1,9 +1,11 @@
 package firestore
 
 import (
+	"fmt"
 	"context"
 	"log"
 
+	"github.com/VanshilShah/plura/firestore/models"
 	"cloud.google.com/go/firestore"
 	"google.golang.org/api/iterator"
 )
@@ -39,15 +41,26 @@ func GetName(ctx context.Context) string {
 		if err != nil {
 			// return err
 		}
-		var user User
-		doc.DataTo(&user)
-		// fmt.Println(doc.Data(), user.Name)
+		user := models.UserFrom(doc)
 		return user.Name
 	}
 	return "no name"
 }
 
-// User represents a user.
-type User struct {
-	Name string `firestore:"name,omitempty"`
+// GetTasks returns a list of tasks
+func GetTasks (ctx context.Context) []models.Task {
+	ret := []models.Task{}
+	iter := client.Collection("tasks").Documents(ctx)
+	for {
+		doc, err := iter.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			// return err
+		}
+		ret = append(ret, *(models.TaskFrom(doc)))
+	}
+	fmt.Println(ret)
+	return ret
 }

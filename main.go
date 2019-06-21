@@ -35,6 +35,11 @@ func main() {
 				"name": firestore.GetName(c),
 			})
 		})
+		api.GET("/tasks", func(c *gin.Context) {
+			c.JSON(http.StatusOK, gin.H{
+				"tasks": firestore.GetTasks(c),
+			})
+		})
 	}
 	// Start and run the server
 	port := os.Getenv("PORT")
