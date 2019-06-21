@@ -20,7 +20,7 @@ func main() {
 	router := gin.Default()
 
 	// Serve frontend static files
-	router.Use(static.Serve("/", static.LocalFile("./views", true)))
+	router.Use(static.Serve("/", static.LocalFile("./public", true)))
 
 	// Setup route group for the API
 	api := router.Group("/api")
