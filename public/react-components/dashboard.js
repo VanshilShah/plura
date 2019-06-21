@@ -19,24 +19,6 @@ import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems, secondaryListItems } from './listItems';
-import Chart from './Chart';
-import Deposits from './Deposits';
-import Orders from './Orders';
-
-function MadeWithLove() {
-  return React.createElement(
-    Typography,
-    { variant: 'body2', color: 'textSecondary', align: 'center' },
-    'Built with love by the ',
-    React.createElement(
-      Link,
-      { color: 'inherit', href: 'https://material-ui.com/' },
-      'Material-UI'
-    ),
-    ' team.'
-  );
-}
 
 var drawerWidth = 240;
 
@@ -119,7 +101,7 @@ var useStyles = makeStyles(function (theme) {
   };
 });
 
-window.Dashboard = function Dashboard() {
+export default function Dashboard() {
   var classes = useStyles();
 
   var _React$useState = React.useState(true),
@@ -190,18 +172,7 @@ window.Dashboard = function Dashboard() {
           React.createElement(ChevronLeftIcon, null)
         )
       ),
-      React.createElement(Divider, null),
-      React.createElement(
-        List,
-        null,
-        mainListItems
-      ),
-      React.createElement(Divider, null),
-      React.createElement(
-        List,
-        null,
-        secondaryListItems
-      )
+      React.createElement(Divider, null)
     ),
     React.createElement(
       'main',
@@ -216,33 +187,20 @@ window.Dashboard = function Dashboard() {
           React.createElement(
             Grid,
             { item: true, xs: 12, md: 8, lg: 9 },
-            React.createElement(
-              Paper,
-              { className: fixedHeightPaper },
-              React.createElement(Chart, null)
-            )
+            React.createElement(Paper, { className: fixedHeightPaper })
           ),
           React.createElement(
             Grid,
             { item: true, xs: 12, md: 4, lg: 3 },
-            React.createElement(
-              Paper,
-              { className: fixedHeightPaper },
-              React.createElement(Deposits, null)
-            )
+            React.createElement(Paper, { className: fixedHeightPaper })
           ),
           React.createElement(
             Grid,
             { item: true, xs: 12 },
-            React.createElement(
-              Paper,
-              { className: classes.paper },
-              React.createElement(Orders, null)
-            )
+            React.createElement(Paper, { className: classes.paper })
           )
         )
-      ),
-      React.createElement(MadeWithLove, null)
+      )
     )
   );
-};
+}

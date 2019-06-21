@@ -7,6 +7,7 @@ import _inherits from 'babel-runtime/helpers/inherits';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Home from './home';
+import Dashboard from './dashboard';
 
 var App = function (_React$Component) {
   _inherits(App, _React$Component);
@@ -23,7 +24,7 @@ var App = function (_React$Component) {
   _createClass(App, [{
     key: 'render',
     value: function render() {
-      return React.createElement(Home, null);
+      return React.createElement(Dashboard, null);
     }
   }]);
 

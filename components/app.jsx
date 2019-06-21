@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import Home from './home';
+import Dashboard from './dashboard';
 
 class App extends React.Component {
     constructor(props) {
@@ -11,7 +12,7 @@ class App extends React.Component {
     }
 
     render() {
-      return (<Home/>)
+      return (<Dashboard/>)
     }    
   }
 
