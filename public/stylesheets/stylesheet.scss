@@ -19,7 +19,6 @@ $app-bar-height: 45px;
 //~~~~~~~~COMPONENTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .appBar{
-  @include primary-bg();
   height: $app-bar-height;
   padding: $padding-s $padding-m $padding-s $padding-m;
   color: $text-on-primary;
@@ -30,6 +29,36 @@ $app-bar-height: 45px;
   @include padding($padding-b);
   background: $background;
   margin: $app-bar-height 0 0 0;
+}
+
+.taskCard{
+  @include margin($margin-m);
+  // @include padding($padding-m);
+  width: 500px;
+  height: 200px;
+}
+
+.taskCardHeader{
+  @include none();
+  @include accent-bg();
+  @include text-on-primary();
+  @include padding($padding-s);
+}
+
+.taskCardContent{
+  @include padding($padding-s);
+  display: grid;
+  grid-auto-flow: column;
+}
+
+.dividerRight{
+  border-right: $accent 1px solid;
+  margin-right: $margin-s;
+}
+
+.completedCheckbox{
+  width: 50px;
+  height: 50px;
 }
 
 html{
