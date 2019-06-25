@@ -9,7 +9,8 @@
     "watch-css": "nodemon -e scss -x npm run build-css",
     "watch-webpack": "npx webpack --config webpack.config.js",
     "watch-jsx": "npx babel --watch components --out-dir public/react-components --presets react-app/prod",
-    "start": "npm run watch-css & npm run watch-jsx & npm run watch-webpack & gin run main.go"
+    "build-start": "npm run watch-css & npm run watch-jsx & npm run watch-webpack & gin run main.go",
+    "start": "go run main.go"
   },
   "repository": {
     "type": "git",
