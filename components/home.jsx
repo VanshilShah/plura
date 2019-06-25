@@ -66,13 +66,13 @@ export default class Home extends React.Component {
     render() {
         const theme = this.createTheme();
         return (
-            <MuiThemeProvider theme={theme}>
-            <AppBar position="absolute" style={{height:50}}>
-              <Typography component="h1" variant="h6" color="inherit" noWrap>
+            <MuiThemeProvider theme={theme} className='fill'>
+            <AppBar position="absolute" className='appBar'>
+              <Typography component="h1" variant="h6" className='none' noWrap>
                 Plura
               </Typography>
             </AppBar>
-            <div>
+            <div className='content'>
                 <p>{this.state.name}</p>
                 {this.state.tasks.length > 0 && this.state.tasks.map(this.renderTask)}
             </div>

@@ -19,17 +19,21 @@ $app-bar-height: 45px;
 //~~~~~~~~COMPONENTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .appBar{
+  @include primary-bg();
   height: $app-bar-height;
   padding: $padding-s $padding-m $padding-s $padding-m;
-  background: $primary;
   color: $text-on-primary;
 }
 
 .content{
   @include fill();
+  @include padding($padding-b);
   background: $background;
-  padding: $padding-b;
   margin: $app-bar-height 0 0 0;
+}
+
+html{
+  @include fill();
 }
 
 body{
@@ -37,4 +41,8 @@ body{
   font-family: 'Assistant', sans-serif;
   margin: 0;
   padding: 0;
+}
+
+#app{
+  @include fill();
 }
