@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-css": "node-sass --include-path scss public/stylesheet.scss public/stylesheet.css",
+    "build-css": "node-sass --include-path scss public/stylesheets/stylesheet.scss public/stylesheet.css",
     "watch-css": "nodemon -e scss -x npm run build-css",
     "watch-webpack": "npx webpack --config webpack.config.js",
     "watch-jsx": "npx babel --watch components --out-dir public/react-components --presets react-app/prod",

@@ -1,0 +1,279 @@
+//~~~~~~~~HELPER CLASSES~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+@mixin primary{
+    color: $primary;
+  }
+  
+  .primary{
+      @include primary();
+  }
+    
+  .primary-hover:hover{
+    @include primary();
+  }
+  
+  @mixin primary-bg {
+    background: $primary;
+  }
+  .primary-bg{
+    @include primary-bg();
+  }
+  
+  @mixin accent{
+    color: $accent;
+  }
+  .accent{
+    @include accent();
+  }
+  .accent-hover:hover{
+    @include accent();
+  }
+  
+  @mixin accent-bg {
+    background: $accent;
+  }
+  .accent-bg{
+    @include accent-bg();
+  }
+  
+  @mixin grey {
+    color: #333;
+  }
+  .grey{
+    @include grey();
+  }
+  .grey-hover:hover{
+    @include grey();
+  }
+  
+  @mixin grey-bg {
+    background: #333;
+  }
+  .grey-bg{
+    @include grey-bg();
+  }
+  
+  @mixin text-on-primary {
+    color: $text-on-primary;
+  }
+  .text-on-primary{
+    @include text-on-primary();
+  }
+  
+  .text-right{
+    text-align: right;
+  }
+  
+  @mixin padding($padding){
+    padding: $padding;
+  }
+  .padding-b{
+    @include padding($padding-b);
+  }
+  .padding-m{
+    @include padding($padding-m);
+  }
+  .padding-s{
+    @include padding($padding-s);
+  }
+  
+  @mixin margin($margin){
+    margin: $margin;
+  }
+  .margin-b{
+    @include margin($margin-b);
+  }
+  .margin-m{
+    @include margin($margin-m);
+  }
+  .margin-s{
+    @include margin($margin-s);
+  }
+  
+  @mixin margin-v($margin){
+    margin: $margin auto;
+  }
+  .margin-v-b{
+    @include margin-v($margin-b);
+  }
+  .margin-v-m{
+    @include margin-v($margin-m);
+  }
+  .margin-v-s{
+    @include margin-v($margin-s);
+  }
+  
+  @mixin no-decor{
+    text-decoration: none;
+  }
+  .no-decor{
+    @include no-decor();
+  }
+  
+  @mixin fill-w{
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+  .fill-w{
+    @include fill-w();
+  }
+  
+  @mixin fill-v{
+    height: 100%;
+    top: 0;
+    bottom: 0;
+  }
+  .fill-v{
+    @include fill-v();
+  }
+  
+  @mixin fill {
+    @include fill-w();
+    @include fill-v();
+  }
+  .fill{
+    @include fill();
+  }
+  
+  @mixin center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto auto;
+  }
+  .center{
+    @include center();
+  }
+  
+  @mixin center-text {
+    text-align: center;
+    line-height: 1;
+  }
+  .center-text{
+    @include center-text();
+  }
+  
+  @mixin center-items {
+    align-items: center;
+  }
+  .center-items{
+    @include center-items();
+  }
+  
+  @mixin circle {
+    padding: 10px;
+    border-radius: 50%;
+  }
+  .circle{
+    @include circle();
+  }
+  
+  @mixin opacity-hover{
+    opacity: 0;
+    transition-duration: 1s;
+  }
+  @mixin opacity($opacity){
+    opacity: $opacity;
+  }
+  .opacity-quarter-hover{
+    @include opacity-hover();
+  }
+  .opacity-quarter-hover:hover{
+    @include opacity(0.25);
+  }
+  
+  .opacity-half-hover{
+    @include opacity-hover();
+  }
+  .opacity-half-hover:hover{
+    @include opacity(0.5);
+  }
+  
+  .opacity-hover{
+    @include opacity-hover();
+  }
+  .opacity-hover:hover{
+    @include opacity(1);
+  }
+  
+  @mixin none-m {
+    margin: 0;
+  }
+  .none-m{
+    @include none-m();
+  }
+  
+  @mixin none{
+    @include none-m();
+    border: none;
+    padding: 0;
+    outline:none;
+  }
+  .none{
+    @include none();
+  }
+  
+  @mixin float($float){
+   float: float; 
+  }
+  .f-left{
+    @include float(left);
+  }
+
+  .f-right{
+    @include float(right)
+  }
+  
+  @mixin top {
+    top: 0;
+  }
+  .top{
+    @include top();
+  }
+  
+  @mixin bottom {
+    bottom: 0;
+  }
+  .bottom{
+    @include bottom();
+  }
+
+  @mixin left {
+    left: 0;
+  }
+  .left{
+    @include left();
+  }
+
+  @mixin right {
+    right: 0;
+  }
+  .right{
+    @include right();
+  }
+
+  @mixin clear {
+    clear: both;
+  }
+  .clear{
+    @include clear();
+  }
+
+  @mixin position($position) {
+    position: $position;
+  }
+  .relative{
+    @include position(relative);
+  }
+  .absolute{
+    @include position(absolute);
+  }
+
+  @mixin show-border {
+    border-color: #000;
+    border-width: medium;
+    border-style: dashed;
+  }
+  .show-border{
+    @include show-border()
+  }

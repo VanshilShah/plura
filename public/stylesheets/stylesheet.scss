@@ -1,0 +1,40 @@
+$primary: #ffcb05;
+$accent: #00b5cc;
+$background: #eee;
+$text-on-primary: white;
+
+$padding-b: 24px;
+$padding-m: 16px;
+$padding-s: 8px;
+
+$margin-b: 24px;
+$margin-m: 16px;
+$margin-s: 8px;
+
+$app-bar-height: 45px;
+
+@import url('https://fonts.googleapis.com/css?family=Assistant&display=swap');
+@import 'mixins.scss';
+
+//~~~~~~~~COMPONENTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.appBar{
+  height: $app-bar-height;
+  padding: $padding-s $padding-m $padding-s $padding-m;
+  background: $primary;
+  color: $text-on-primary;
+}
+
+.content{
+  @include fill();
+  background: $background;
+  padding: $padding-b;
+  margin: $app-bar-height 0 0 0;
+}
+
+body{
+  @include fill();
+  font-family: 'Assistant', sans-serif;
+  margin: 0;
+  padding: 0;
+}
