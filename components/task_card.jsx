@@ -24,8 +24,8 @@ export default class TaskCard extends React.Component {
             </div>
             <Checkbox
                 className='completedCheckbox'
-                checked={this.state.completed}
-                onChange={event => {this.setState({'Completed': !this.state.completed})}}
+                checked={this.state.Completed}
+                onChange={event => {this.setState({'Completed': !this.state.Completed})}}
                 value="completed"
                 inputProps={{'aria-label': 'completed checkbox'}}/>
         </Card>);
