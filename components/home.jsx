@@ -1,7 +1,10 @@
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
+import clsx from 'clsx';
+import { makeStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import { yellow, blue } from "@material-ui/core/colors";
+import Typography from '@material-ui/core/Typography';
 
 export default class Home extends React.Component {
     constructor(props) {
@@ -59,12 +62,16 @@ export default class Home extends React.Component {
           }
         });
     }
-
+    
     render() {
-        var theme = this.createTheme();
+        const theme = this.createTheme();
         return (
             <MuiThemeProvider theme={theme}>
-            <AppBar position="static" style={{height: 50}}></AppBar>
+            <AppBar position="absolute" style={{height:50}}>
+              <Typography component="h1" variant="h6" color="inherit" noWrap>
+                Plura
+              </Typography>
+            </AppBar>
             <div>
                 <p>{this.state.name}</p>
                 {this.state.tasks.length > 0 && this.state.tasks.map(this.renderTask)}

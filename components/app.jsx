@@ -12,7 +12,10 @@ class App extends React.Component {
     }
 
     render() {
-      return (<Dashboard/>)
+      return (<div>
+        <Home/>
+        {/* <Dashboard/> */}
+        </div>)
     }    
   }
 

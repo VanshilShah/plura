@@ -7,7 +7,7 @@ module.exports = {
     // new BundleAnalyzerPlugin()
     new HardSourceWebpackPlugin()
   ],
-  mode: 'production',
+  mode: 'development',
   entry: {
     app:  './public/react-components/app.js'
   },
