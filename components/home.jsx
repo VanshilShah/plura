@@ -9,7 +9,7 @@ export default class Home extends React.Component {
       super(props);
       this.state = {
         name: "loading",
-        tasks: ["no tasks"]
+        tasks: undefined
       }
       
     }
@@ -63,6 +63,7 @@ export default class Home extends React.Component {
     
     render() {
         const theme = this.createTheme();
+        
         return (
             <MuiThemeProvider theme={theme}>
             <AppBar position="absolute" className='appBar'>
@@ -71,14 +72,13 @@ export default class Home extends React.Component {
               </Typography>
             </AppBar>
             <div className='content'>
-                {this.state.tasks.length > 0 && this.state.tasks.map(this.renderTask)}
+                {this.state.tasks != undefined && Object.keys(this.state.tasks).map(this.renderTask)}
             </div>
             </MuiThemeProvider>
         );
-            
     }    
     
-    renderTask = task => {
-      return (<TaskCard key={task.ID} task={task}/>)
+    renderTask = key => {
+      return (<TaskCard key={key} task={this.state.tasks[key]}/>)
     }
   }
