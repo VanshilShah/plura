@@ -19,6 +19,14 @@ const (
 	List TaskType = "list"
 )
 
+// ChildTask represents a summary of a child task
+type ChildTask struct {
+	ID        string
+	Name      string
+	TaskType  TaskType
+	Completed bool
+}
+
 // Task represents a task
 type Task struct {
 	ID          string                   `firestore:"id,omitempty"`
@@ -30,14 +38,15 @@ type Task struct {
 	Owner       *firestore.DocumentRef   `firestore:"owner,omitempty"`
 	Parent      *firestore.DocumentRef   `firestore:"parent,omitempty"`
 	Tags        []*firestore.DocumentRef `firestore:"tasks,omitempty"`
-	Completed   bool                     `firestore:"completed,omitempty"`
+	Children    []ChildTask
+	Completed   bool `firestore:"completed,omitempty"`
 }
 
 // TaskFrom creates a new Task object from a Document snapshot
 func TaskFrom(snapshot *firestore.DocumentSnapshot) *Task {
 	var task Task
-	data := snapshot.Data()
-	fmt.Println(data)
+	// data := snapshot.Data()
+	// fmt.Println(data)
 	if err := snapshot.DataTo(&task); err != nil {
 		fmt.Println(err)
 	}

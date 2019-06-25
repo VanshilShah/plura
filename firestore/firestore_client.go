@@ -1,12 +1,11 @@
 package firestore
 
 import (
-	"fmt"
 	"context"
 	"log"
 
-	"github.com/VanshilShah/plura/firestore/models"
 	"cloud.google.com/go/firestore"
+	"github.com/VanshilShah/plura/firestore/models"
 	"google.golang.org/api/iterator"
 )
 
@@ -48,8 +47,8 @@ func GetName(ctx context.Context) string {
 }
 
 // GetTasks returns a list of tasks
-func GetTasks (ctx context.Context) []models.Task {
-	ret := []models.Task{}
+func GetTasks(ctx context.Context) map[string]*models.Task {
+	tasks := []*models.Task{}
 	iter := client.Collection("tasks").Documents(ctx)
 	for {
 		doc, err := iter.Next()
@@ -59,8 +58,24 @@ func GetTasks (ctx context.Context) []models.Task {
 		if err != nil {
 			// return err
 		}
-		ret = append(ret, *(models.TaskFrom(doc)))
+		tasks = append(tasks, (models.TaskFrom(doc)))
 	}
-	fmt.Println(ret)
-	return ret
+	// fmt.Println(tasks)
+	return buildTaskHeirarchy(tasks)
+}
+
+func buildTaskHeirarchy(tasks []*models.Task) map[string]*models.Task {
+	taskMap := make(map[string]*models.Task)
+	// populate map
+	for _, task := range tasks {
+		taskMap[task.ID] = task
+	}
+
+	// update children fields
+	for _, task := range tasks {
+		if task.Parent != nil {
+			taskMap[task.Parent.ID].Children = append(taskMap[task.Parent.ID].Children, models.ChildTask{task.ID, task.Name, task.TaskType, task.Completed})
+		}
+	}
+	return taskMap
 }
