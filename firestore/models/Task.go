@@ -30,6 +30,7 @@ type Task struct {
 	Owner       *firestore.DocumentRef   `firestore:"owner,omitempty"`
 	Parent      *firestore.DocumentRef   `firestore:"parent,omitempty"`
 	Tags        []*firestore.DocumentRef `firestore:"tasks,omitempty"`
+	Completed   bool                     `firestore:"completed,omitempty"`
 }
 
 // TaskFrom creates a new Task object from a Document snapshot
