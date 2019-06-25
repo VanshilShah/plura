@@ -11,9 +11,26 @@ $margin-b: 25px;
 $margin-m: 15px;
 $margin-s: 5px;
 
+$app-bar-height: 40px;
+
 @import url('https://fonts.googleapis.com/css?family=Assistant&display=swap');
 
+//~~~~~~~~COMPONENTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.appBar{
+  height: $app-bar-height;
+  padding: $padding-s $padding-m $padding-s $padding-m;
+  background: $primary;
+  color: $text-on-primary;
+}
+
+.content{
+  padding: $padding-b;
+  margin-top: $app-bar-height;
+}
+
 //~~~~~~~~HELPER CLASSES~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 body{
   font-family: 'Assistant', sans-serif;
 }
