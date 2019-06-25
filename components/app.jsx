@@ -1,9 +1,8 @@
 'use strict'
 
-import React, { Component } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import Home from './home';
-import Dashboard from './dashboard';
 
 class App extends React.Component {
     constructor(props) {

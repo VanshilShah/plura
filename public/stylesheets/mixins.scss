@@ -214,7 +214,7 @@
   }
   
   @mixin float($float){
-   float: float; 
+   float: $float; 
   }
   .f-left{
     @include float(left);

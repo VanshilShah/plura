@@ -1,10 +1,8 @@
-import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-import { yellow, blue } from "@material-ui/core/colors";
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import React from 'react';
+import TaskCard from './task_card';
 
 export default class Home extends React.Component {
     constructor(props) {
@@ -43,18 +41,18 @@ export default class Home extends React.Component {
     }
 
     createTheme() {
-        var primaryColor = yellow, secondaryColor = blue;
+        var primaryColor = '#ffcb05', secondaryColor = '#00b5cc';
         return createMuiTheme({
           palette: {
             primary: {
-              light: primaryColor[300],
-              main: primaryColor[500],
-              dark: primaryColor[700],
+              light: primaryColor,
+              main: primaryColor,
+              dark: primaryColor,
             },
             secondary: {
-              light: secondaryColor[300],
-              main: secondaryColor[500],
-              dark: secondaryColor[700],
+              light: secondaryColor,
+              main: secondaryColor,
+              dark: secondaryColor,
             }
           },
           typography: {
@@ -66,14 +64,13 @@ export default class Home extends React.Component {
     render() {
         const theme = this.createTheme();
         return (
-            <MuiThemeProvider theme={theme} className='fill'>
+            <MuiThemeProvider theme={theme}>
             <AppBar position="absolute" className='appBar'>
               <Typography component="h1" variant="h6" className='none' noWrap>
                 Plura
               </Typography>
             </AppBar>
             <div className='content'>
-                <p>{this.state.name}</p>
                 {this.state.tasks.length > 0 && this.state.tasks.map(this.renderTask)}
             </div>
             </MuiThemeProvider>
@@ -82,6 +79,6 @@ export default class Home extends React.Component {
     }    
     
     renderTask = task => {
-      return (<p key={task.ID}>{task.Name}</p>)
+      return (<TaskCard key={task.ID} task={task}/>)
     }
   }
