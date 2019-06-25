@@ -5,8 +5,7 @@ export default class TaskCard extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        ...this.props.task,
-        completed: false
+        ...this.props.task
       }
       
     }
@@ -26,7 +25,7 @@ export default class TaskCard extends React.Component {
             <Checkbox
                 className='completedCheckbox'
                 checked={this.state.completed}
-                onChange={event => {this.setState({'completed': !this.state.completed})}}
+                onChange={event => {this.setState({'Completed': !this.state.completed})}}
                 value="completed"
                 inputProps={{'aria-label': 'completed checkbox'}}/>
         </Card>);
