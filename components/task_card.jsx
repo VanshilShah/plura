@@ -1,4 +1,5 @@
 import { Button, Card, Checkbox } from '@material-ui/core';
+import moment from 'moment';
 import React from 'react';
 
 export default class TaskCard extends React.Component {
@@ -14,7 +15,8 @@ export default class TaskCard extends React.Component {
         return (<Card className='taskCard'>
             <div className='taskCardHeader'>
                 <p className='none f-left'>{this.state.Name}</p>
-                <p className='none f-right'>{this.state.Deadline}</p>
+                <p className='none f-left'>{moment(this.state.Deadline).format("ddd, MMM Do, hA")}</p>
+                <p className='none f-left'>{moment.duration(this.state.Duration, 'm').humanize()}</p>
                 <div className='clear'></div>
             </div>
             <div className='taskCardContent'>
@@ -22,7 +24,9 @@ export default class TaskCard extends React.Component {
                 <p className='none margin-v-m'>{this.state.Description}</p>
                 </div>
                 <div>{this.state.Parent ? this.state.Parent.ID : ''}</div>
-                {this.state.Children != undefined && this.state.Children.map(this.renderChildTask)}
+                <div className='childTaskContainer'>
+                  {this.state.Children != undefined && this.state.Children.map(this.renderChildTask)}
+                </div>
             </div>
             <Checkbox
                 className='completedCheckbox'
@@ -35,14 +39,13 @@ export default class TaskCard extends React.Component {
     }
     
     renderChildTask = childTask => {
-      return [<div/>,
-      <Button 
-        className='childTask dividerRight'
+      return (<Button 
+        className='childTask'
         style={{display:'block'}}
         key={childTask.ID}
         variant="contained"
         color="secondary">
           {childTask.Name}
-        </Button>]
+        </Button>);
     }
   }

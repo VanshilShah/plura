@@ -1,11 +1,13 @@
 const path = require('path');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 var HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
+const MomentLocalesPlugin = require('moment-locales-webpack-plugin');
 
 module.exports = {
   plugins: [
     // new BundleAnalyzerPlugin()
-    new HardSourceWebpackPlugin()
+    new HardSourceWebpackPlugin(),
+    new MomentLocalesPlugin(),
   ],
   mode: 'development',
   entry: {
