@@ -1,7 +1,10 @@
 import AppBar from '@material-ui/core/AppBar';
+import Fab from '@material-ui/core/Fab';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
 import React from 'react';
+import CreateTask from './create_task';
 import TaskCard from './task_card';
 
 export default class Home extends React.Component {
@@ -9,9 +12,10 @@ export default class Home extends React.Component {
       super(props);
       this.state = {
         name: "loading",
-        tasks: undefined
+        tasks: undefined,
+        createActive: false,
       }
-      
+      this.createTask = React.createRef();
     }
     componentDidMount() {
       this.getName();
@@ -75,12 +79,19 @@ export default class Home extends React.Component {
             </AppBar>
             <div className='content'>
                 {this.state.tasks != undefined && Object.keys(this.state.tasks).map(this.renderTask)}
+                {!this.state.createActive && <Fab color="primary" aria-label="Add" className='createFab'onClick={event => {
+                  this.setState({createActive: false})
+                  this.createTask.current.toggleActive();
+                }}>
+                  <AddIcon />
+                </Fab>}
             </div>
+            <CreateTask ref={this.createTask}></CreateTask>
             </MuiThemeProvider>
         );
     }    
     
     renderTask = key => {
-      return (<TaskCard key={key} task={this.state.tasks[key]}/>)
+      return key!= 'root' && (<TaskCard key={key} task={this.state.tasks[key]}/>)
     }
   }

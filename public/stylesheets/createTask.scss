@@ -1,0 +1,22 @@
+$create-task-height: 400px;
+
+.createTask{
+    @include fill-w();
+    max-height: 0px;
+    position: absolute;
+    bottom: 0;
+}
+.createTaskActive{
+    max-height: $create-task-height+100px;
+    height: $create-task-height;
+    display: block;
+    animation-name: fadein;
+    animation-duration: 0.65s;
+    animation-timing-function: cubic-bezier(0.27, 0.04, 0.27, 1.55);
+}
+
+/* Standard syntax */
+@keyframes fadein {
+    from {height: 0px;}
+    to {height: $create-task-height;}
+}

@@ -15,6 +15,8 @@ $app-bar-height: 45px;
 
 @import url('https://fonts.googleapis.com/css?family=Assistant&display=swap');
 @import 'mixins.scss';
+@import 'taskCard.scss';
+@import 'createTask.scss';
 
 //~~~~~~~~COMPONENTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -25,59 +27,23 @@ $app-bar-height: 45px;
 }
 
 .content{
-  @include fill();
+  @include fill-v($app-bar-height);
+  @include fill-w($app-bar-height);
   @include padding($padding-b);
+  position: relative;
   background: $background;
   margin: $app-bar-height 0 0 0;
 }
 
-.taskCard{
+Button.createFab{
   @include margin($margin-m);
-  // @include padding($padding-m);
-  width: 500px;
-}
-
-.taskCardHeader{
-  @include none();
-  @include accent-bg();
-  @include text-on-primary();
-  @include padding($padding-s);
-  display: flex;
-  justify-content: space-between;
-}
-
-.taskCardContent{
-  @include padding($padding-s);
-  display: grid;
-  grid-template-columns: 60% 40%;
-  grid-auto-rows: 2;
-}
-
-.dividerRight{
-  border-right: $accent 1px solid;
-}
-
-.childTaskContainer{
-  // @include padding($padding-s);
-  border: $accent 1px solid;
-  grid-column-start: 2;
-}
-
-.childTask{
-  @include none();
-  @include no-decor();
-  @include accent-bg();
-  @include text-on-primary();
-  display: block;
-  border-radius: 3px;
-}
-
-.completedCheckbox{
-  @include float(right);
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 
 html{
-  @include fill();
+  height: 95%;
 }
 
 body{
