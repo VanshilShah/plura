@@ -1,4 +1,4 @@
-import { Card, Checkbox } from '@material-ui/core';
+import { Button, Card, Checkbox } from '@material-ui/core';
 import React from 'react';
 
 export default class TaskCard extends React.Component {
@@ -18,9 +18,11 @@ export default class TaskCard extends React.Component {
                 <div className='clear'></div>
             </div>
             <div className='taskCardContent'>
-                <div className='dividerRight'>{this.state.Description}</div>
+                <div className='dividerRight'>
+                <p className='none margin-v-m'>{this.state.Description}</p>
+                </div>
                 <div>{this.state.Parent ? this.state.Parent.ID : ''}</div>
-                {/* <div className='clear'></div> */}
+                {this.state.Children != undefined && this.state.Children.map(this.renderChildTask)}
             </div>
             <Checkbox
                 className='completedCheckbox'
@@ -30,5 +32,17 @@ export default class TaskCard extends React.Component {
                 inputProps={{'aria-label': 'completed checkbox'}}/>
         </Card>);
             
+    }
+    
+    renderChildTask = childTask => {
+      return [<div/>,
+      <Button 
+        className='childTask dividerRight'
+        style={{display:'block'}}
+        key={childTask.ID}
+        variant="contained"
+        color="secondary">
+          {childTask.Name}
+        </Button>]
     }
   }

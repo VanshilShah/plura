@@ -35,7 +35,6 @@ $app-bar-height: 45px;
   @include margin($margin-m);
   // @include padding($padding-m);
   width: 500px;
-  height: 200px;
 }
 
 .taskCardHeader{
@@ -48,17 +47,27 @@ $app-bar-height: 45px;
 .taskCardContent{
   @include padding($padding-s);
   display: grid;
-  grid-auto-flow: column;
+  grid-template-columns: 60% 20%;
+  grid-auto-rows: 2;
+  gap: $margin-s;
 }
 
 .dividerRight{
   border-right: $accent 1px solid;
-  margin-right: $margin-s;
+  // margin-right: $margin-s;
+}
+
+.childTask{
+  @include none();
+  @include no-decor();
+  @include accent-bg();
+  @include text-on-primary();
+  display: block;
+  border-radius: 3px;
 }
 
 .completedCheckbox{
-  width: 50px;
-  height: 50px;
+  @include float(right);
 }
 
 html{

@@ -48,11 +48,13 @@ export default class Home extends React.Component {
               light: primaryColor,
               main: primaryColor,
               dark: primaryColor,
+              contrastText: '#fff',
             },
             secondary: {
               light: secondaryColor,
               main: secondaryColor,
               dark: secondaryColor,
+              contrastText: '#fff',
             }
           },
           typography: {
