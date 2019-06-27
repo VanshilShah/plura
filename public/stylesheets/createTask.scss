@@ -15,6 +15,22 @@ $create-task-height: 400px;
     animation-timing-function: cubic-bezier(0.27, 0.04, 0.27, 1.55);
 }
 
+.createTaskHeader{
+    @include none();
+    @include accent-bg();
+    @include text-on-primary();
+    @include padding($padding-m);
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .createTaskContent{
+    @include padding($padding-m);
+    display: grid;
+    grid-template-columns: 10% 10% 10% 10%;
+    gap: $padding-m;
+  }
+
 /* Standard syntax */
 @keyframes fadein {
     from {height: 0px;}
