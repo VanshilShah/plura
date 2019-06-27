@@ -34,6 +34,7 @@ type Task struct {
 	Description string                   `firestore:"description,omitempty"`
 	Deadline    time.Time                `firestore:"deadline,omitempty"`
 	Duration    int                      `firestore:"duration,omitempty"` // in minutes
+	ChunkSize   int                      `firestore:"chunk,omitempty"`    // in minutes
 	Repetition  string                   `firestore:"repetition,omitempty"`
 	TaskType    TaskType                 `firestore:"type,omitempty"`
 	Owner       *firestore.DocumentRef   `firestore:"owner,omitempty"`
