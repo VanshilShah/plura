@@ -5,6 +5,7 @@ $create-task-height: 400px;
     max-height: 0px;
     position: absolute;
     bottom: 0;
+    overflow: hidden;
 }
 .createTaskActive{
     max-height: $create-task-height+100px;
@@ -27,7 +28,7 @@ $create-task-height: 400px;
   .createTaskContent{
     @include padding($padding-m);
     display: grid;
-    grid-template-columns: 10% 10% 10% 10%;
+    grid-template-columns: 15% 15% 15% 15% 15%;
     gap: $padding-m;
   }
 

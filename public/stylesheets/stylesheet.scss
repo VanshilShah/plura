@@ -28,7 +28,6 @@ $app-bar-height: 45px;
 
 .content{
   @include fill-v($app-bar-height);
-  @include fill-w($app-bar-height);
   @include padding($padding-b);
   position: relative;
   background: $background;
