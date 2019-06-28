@@ -43,7 +43,8 @@ export default class TaskCard extends React.Component {
         className='childTask'
         key={childTask.ID}
         variant="contained"
-        color="secondary">
+        color="secondary"
+        onClick={this.props.editTask(childTask.ID)}>
           {childTask.Name}
         </Button>);
     }

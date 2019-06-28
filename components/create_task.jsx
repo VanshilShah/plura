@@ -13,7 +13,6 @@ export default class CreateTask extends React.Component {
 
     startingState = () => {
       return {
-        isSubTask: true,
         Name: '',
         Description: '',
         TaskType: 'project',
@@ -61,10 +60,11 @@ export default class CreateTask extends React.Component {
       const {Name, Description, isSubTask, TaskType, Duration, ChunkSize, Recurrance} = this.state;
       const {Weekdays} = Recurrance;
       const classes = 'createTask' + (this.props.active? ' createTaskActive':' createTaskSlideOut');
+      const recurranceTypes = ['once','weekly', 'monthly', 'yearly'];
       const showWeekdayPicker = Recurrance.Type == 'weekly';
       const showMonthDayPicker = Recurrance.Type == 'monthly';
       const showDatePicker = Recurrance.Type == 'once' || Recurrance.Type == 'yearly';
-      const tasktypes = isSubTask ? ['project', 'roadblock'] : ['project'];
+      const tasktypes = ['project', 'roadblock'];
 
       const datePickerProps = {
         'once': {label: "Deadline", disablePast: true, value: Recurrance.Deadline},
@@ -101,7 +101,7 @@ export default class CreateTask extends React.Component {
             value={Recurrance.Type}
             onChange={event => this.setState({Recurrance: {...Recurrance, Type: event.target.value}})}
             helperText="How often should this task occur">
-            {['once','weekly', 'monthly', 'yearly'].map(option => (
+            {recurranceTypes.map(option => (
               <MenuItem key={option} value={option}>
                 {option}
               </MenuItem>

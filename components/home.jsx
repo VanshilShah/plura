@@ -69,7 +69,7 @@ export default class Home extends React.Component {
     
     render() {
         const theme = this.createTheme();
-        const createTask = this.createTaskRef.current
+        const createTaskComponent = this.createTaskRef.current
         
         return (
             <MuiThemeProvider theme={theme}>
@@ -86,8 +86,7 @@ export default class Home extends React.Component {
                     aria-label="Add" 
                     className='createFab'
                     onClick={event => {
-                      this.setState({createActive: true})
-                      createTask.setState(createTask.startingState());
+                      this.createTask(createTaskComponent.startingState())
                 }}>
                   <AddIcon />
                 </Fab>}
@@ -100,7 +99,19 @@ export default class Home extends React.Component {
         );
     }    
     
+    createTask = task => {
+      const createTaskComponent = this.createTaskRef.current
+      this.setState({createActive: true})
+      createTaskComponent.setState({...task});
+    }
+
+    editTask = key => event => {
+      const task = this.state.tasks[key];
+      this.createTask(task);
+    }
+
     renderTask = key => {
-      return key!= 'root' && (<TaskCard key={key} task={this.state.tasks[key]}/>)
+    const task = this.state.tasks[key];
+    return key!= 'root' && (<TaskCard key={key} task={task} editTask={this.editTask}/>)
     }
   }
