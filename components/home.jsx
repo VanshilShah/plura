@@ -1,4 +1,6 @@
+import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
+import Dialog from '@material-ui/core/Dialog';
 import Fab from '@material-ui/core/Fab';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -14,6 +16,8 @@ export default class Home extends React.Component {
         name: "loading",
         tasks: undefined,
         createActive: false,
+        showDeleteTaskDialog: false,
+        deletingTask: ''
       }
       this.createTaskRef = React.createRef();
     }
@@ -56,11 +60,41 @@ export default class Home extends React.Component {
         });
         if (res.status == 200){
           this.setState({createActive: false});
+          this.getTasks()
         }
         console.log(res);
       }catch (err) {
         console.log(err);
       }
+    }
+
+    deleteTask = async() => {
+      try{
+        const task = this.state.tasks[this.state.deletingTask];
+        const res = await fetch('/api/tasks', {
+          method: 'DELETE',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(task)
+        });
+        if (res.status == 200){
+          this.cancelDeleteTask();
+          this.setState({createActive: false});
+          this.getTasks()
+        }
+        console.log(res);
+      }catch (err) {
+        console.log(err);
+      }
+    }
+    
+    cancelDeleteTask = event => {
+      this.setState({showDeleteTaskDialog: false, deletingTask: ''})
+    }
+    openDeleteTask = key => event => {
+      this.setState({showDeleteTaskDialog: true, deletingTask: key})
     }
 
     createTheme() {
@@ -78,7 +112,7 @@ export default class Home extends React.Component {
               main: secondaryColor,
               dark: secondaryColor,
               contrastText: '#fff',
-            }
+            },
           },
           typography: {
             useNextVariants: true
@@ -92,6 +126,7 @@ export default class Home extends React.Component {
         
         return (
             <MuiThemeProvider theme={theme}>
+            {this.renderDeleteDialog()}
             <AppBar position="absolute" className='appBar'>
               <Typography component="h1" variant="h6" className='none' noWrap>
                 Plura
@@ -114,10 +149,37 @@ export default class Home extends React.Component {
               ref={this.createTaskRef}
               active={this.state.createActive}
               disactivate={() => this.setState({createActive: false})}
+              deleteTask={this.openDeleteTask}
               save={this.saveTask}/>
             </MuiThemeProvider>
         );
     }    
+
+    renderDeleteDialog = () => {
+      return (
+        <Dialog
+          open={this.state.showDeleteTaskDialog}
+          onClose={this.cancelDeleteTask}
+          aria-labelledby="delete-dialog-title"
+          aria-describedby="delete-dialog-description">
+          <DialogTitle id="delete-dialog-title">{"Are you sure you want to delete this task?"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="delete-dialog-description">
+              Once a task is deleted, it cannot be recovered, all of the subtasks and roadblocks associated with this task will also be deleted.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+          <Button onClick={this.cancelDeleteTask} color="primary">
+            No
+          </Button>
+          <Button onClick={this.deleteTask} color="primary" variant='contained' autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+      );
+    }
+
     
     createTask = task => {
       const createTaskComponent = this.createTaskRef.current

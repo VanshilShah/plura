@@ -57,6 +57,21 @@ func main() {
 			}
 
 		})
+		api.DELETE("/tasks", func(c *gin.Context) {
+			// data, _ := c.GetRawData()
+			// fmt.Println(string(data))
+			var task models.Task
+			err := c.BindJSON(&task)
+			if err != nil {
+				fmt.Println(err)
+			}
+			if firestore.DeleteTask(c, task) {
+				c.JSON(200, gin.H{})
+			} else {
+				c.JSON(400, gin.H{})
+			}
+
+		})
 	}
 	// Start and run the server
 	port := os.Getenv("PORT")

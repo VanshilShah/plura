@@ -1,5 +1,6 @@
 import MomentUtils from '@date-io/moment';
-import { Button, Checkbox, FormControlLabel, FormLabel, MenuItem, Paper, TextField } from '@material-ui/core';
+import { Button, Checkbox, FormControlLabel, FormLabel, IconButton, MenuItem, Paper, TextField } from '@material-ui/core';
+import { Delete } from '@material-ui/icons';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
 import React from 'react';
@@ -13,6 +14,7 @@ export default class CreateTask extends React.Component {
 
     startingState = () => {
       return {
+        ID: undefined,
         Name: '',
         Description: '',
         TaskType: 'project',
@@ -55,7 +57,7 @@ export default class CreateTask extends React.Component {
       this.setState({[name]: event.target.value})
     };
   
-
+    
     render() {
 
       const {Name, Description, TaskType, Duration, ChunkSize, Recurrance} = this.state;
@@ -81,6 +83,15 @@ export default class CreateTask extends React.Component {
             label="Name"
             value={Name}
             onChange={this.handleTextChange('Name')}/>
+          {this.state.ID 
+          && <IconButton 
+            color='inherit'
+            className='none f-right'
+            aria-label='Delete'
+            onClick={this.props.deleteTask(this.state.ID)}>
+            <Delete />
+          </IconButton>}
+          <div className='clear'/>
         </div>
         <div className='createTaskContent'>
           <TextField

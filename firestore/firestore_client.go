@@ -96,3 +96,17 @@ func SaveTask(ctx context.Context, task models.Task) bool {
 	}
 	return err == nil
 }
+
+// DeleteTask deletes an existing task as well as all of its children tasks
+func DeleteTask(ctx context.Context, task models.Task) bool {
+	fmt.Println(task)
+	_, err := client.Collection("tasks").Doc(task.ID).Delete(ctx)
+	for _, childTask := range task.Children {
+		_, err = client.Collection("tasks").Doc(childTask.ID).Delete(ctx)
+	}
+	if err != nil {
+		// Handle any errors in an appropriate way, such as returning them.
+		fmt.Println(err)
+	}
+	return err == nil
+}
