@@ -55,8 +55,8 @@ type Task struct {
 			th bool
 			f  bool
 		} `firestore:"weekdays,omitempty"`
-		MonthDay int `firestore:"monthday,omitempty"`
-		YearDay  int `firestore:"yearday,omitempty"`
+		MonthDay int       `firestore:"monthday,omitempty"`
+		YearDay  time.Time `firestore:"yearday,omitempty"`
 	}
 	TaskType  TaskType                 `firestore:"type,omitempty"`
 	Owner     *firestore.DocumentRef   `firestore:"owner,omitempty"`
