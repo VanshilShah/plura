@@ -9,6 +9,7 @@ import (
 
 // TaskType represents the different type of tasks that the application will handle.
 type TaskType string
+type RecurranceType string
 
 const (
 	// Project is for basic tasks with durations, deadlines and subtasks.
@@ -17,6 +18,15 @@ const (
 	Roadblock TaskType = "roadblock"
 	// List is a special type of task that produces new tasks based off of a list.
 	List TaskType = "list"
+
+	// Once is a RecurranceType for one time tasks
+	Once RecurranceType = "once"
+	// Weekly is a RecurranceType for weekly repeating tasks
+	Weekly RecurranceType = "weekly"
+	// Monthly is a RecurranceType for monthly repeating tasks
+	Monthly RecurranceType = "monthly"
+	// Yearly is a RecurranceType for yearly repeating tasks
+	Yearly RecurranceType = "yearly"
 )
 
 // ChildTask represents a summary of a child task
@@ -29,19 +39,31 @@ type ChildTask struct {
 
 // Task represents a task
 type Task struct {
-	ID          string                   `firestore:"id,omitempty"`
-	Name        string                   `firestore:"name,omitempty"`
-	Description string                   `firestore:"description,omitempty"`
-	Deadline    time.Time                `firestore:"deadline,omitempty"`
-	Duration    int                      `firestore:"duration,omitempty"` // in minutes
-	ChunkSize   int                      `firestore:"chunk,omitempty"`    // in minutes
-	Repetition  string                   `firestore:"repetition,omitempty"`
-	TaskType    TaskType                 `firestore:"type,omitempty"`
-	Owner       *firestore.DocumentRef   `firestore:"owner,omitempty"`
-	Parent      *firestore.DocumentRef   `firestore:"parent,omitempty"`
-	Tags        []*firestore.DocumentRef `firestore:"tasks,omitempty"`
-	Children    []ChildTask
-	Completed   bool `firestore:"completed,omitempty"`
+	ID          string `firestore:"id,omitempty"`
+	Name        string `firestore:"name,omitempty"`
+	Description string `firestore:"description,omitempty"`
+	Duration    int    `firestore:"duration,omitempty"` // in minutes
+	ChunkSize   int    `firestore:"chunk,omitempty"`    // in minutes
+	Recurrance  struct {
+		Type     RecurranceType `firestore:"recurrance,omitempty"`
+		Deadline time.Time      `firestore:"deadline,omitempty"`
+		Weekdays struct {
+			s  bool
+			m  bool
+			t  bool
+			w  bool
+			th bool
+			f  bool
+		} `firestore:"weekdays,omitempty"`
+		MonthDay int `firestore:"monthday,omitempty"`
+		YearDay  int `firestore:"yearday,omitempty"`
+	}
+	TaskType  TaskType                 `firestore:"type,omitempty"`
+	Owner     *firestore.DocumentRef   `firestore:"owner,omitempty"`
+	Parent    *firestore.DocumentRef   `firestore:"parent,omitempty"`
+	Tags      []*firestore.DocumentRef `firestore:"tasks,omitempty"`
+	Children  []ChildTask
+	Completed bool `firestore:"completed,omitempty"`
 }
 
 // TaskFrom creates a new Task object from a Document snapshot

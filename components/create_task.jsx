@@ -4,7 +4,8 @@ import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
 import React from 'react';
 
-export default class CreateTask extends React.Component {
+
+export default class CreateTask extends React.Component { 
     constructor(props) {
       super(props);
       this.state = {
@@ -12,7 +13,7 @@ export default class CreateTask extends React.Component {
         Deadline: moment(),
         Duration: 1,
         ChunkSize: 1,
-      }
+      } 
     }
 
     handleDateChange = date => {
@@ -20,12 +21,17 @@ export default class CreateTask extends React.Component {
     }
 
     handleChange = name => event => {
-      this.setState({[name]: event.target.value})
+      this.setState({[name]: name=='Deadline'?event:event.target.value})
     };
   
 
     render() {
       const classes = 'createTask' + (this.props.active? ' createTaskActive':'');
+      const showDatePicker = this.state.Recurrance == 'once' || this.state.Recurrance == 'yearly';
+
+      const datePickerProps = {
+        'once': {label: "Deadline", disablePast: true, }
+      }
       return (
       <MuiPickersUtilsProvider utils={MomentUtils}>
       <Paper className={classes}>
@@ -49,19 +55,16 @@ export default class CreateTask extends React.Component {
               </MenuItem>
             ))}
           </TextField>
-          <DatePicker
-            id="deadline"
-            label="Deadline"
-            disablePast
-            allowKeyboardControl
-            autoOk
-            value={this.state.Deadline}
-            onChange={this.handleChange('Deadline')}
-            minDate={new Date()}
-            KeyboardButtonProps={{
-              'aria-label': 'change date',
-            }}
-          />
+          {showDatePicker  
+            && <DatePicker
+              id="deadline"
+              label="Deadline"
+              allowKeyboardControl
+              autoOk
+              value={this.state.Deadline}
+              onChange={this.handleChange('Deadline')}
+              KeyboardButtonProps={{'aria-label': 'change date',}}
+              />}
           <TextField
             id="duration"
             label="Duration (hours)"
@@ -78,8 +81,12 @@ export default class CreateTask extends React.Component {
             type="number"
           />
           <TextField
-            id="name"
-            label="Name"/>
+            id="description"
+            multiline
+            rows="4"
+            value={this.state.Description}
+            onChange={this.handleChange('Description')}
+            label="Description"/>
           <TextField
             id="name"
             label="Name"/>
