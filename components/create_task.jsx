@@ -8,9 +8,15 @@ import React from 'react';
 export default class CreateTask extends React.Component { 
     constructor(props) {
       super(props);
-      this.state = {
+      this.state = this.startingState();
+    }
+
+    startingState = () => {
+      return {
+        isSubTask: true,
         Name: '',
         Description: '',
+        TaskType: 'project',
         Recurrance: {
           Type: 'once',
           Deadline: moment(),
@@ -52,12 +58,13 @@ export default class CreateTask extends React.Component {
 
     render() {
 
-      const {Name, Description, Duration, ChunkSize, Recurrance} = this.state;
+      const {Name, Description, isSubTask, TaskType, Duration, ChunkSize, Recurrance} = this.state;
       const {Weekdays} = Recurrance;
       const classes = 'createTask' + (this.props.active? ' createTaskActive':' createTaskSlideOut');
       const showWeekdayPicker = Recurrance.Type == 'weekly';
       const showMonthDayPicker = Recurrance.Type == 'monthly';
       const showDatePicker = Recurrance.Type == 'once' || Recurrance.Type == 'yearly';
+      const tasktypes = isSubTask ? ['project', 'roadblock'] : ['project'];
 
       const datePickerProps = {
         'once': {label: "Deadline", disablePast: true, value: Recurrance.Deadline},
@@ -67,13 +74,26 @@ export default class CreateTask extends React.Component {
       <MuiPickersUtilsProvider utils={MomentUtils}>
       <Paper className={classes}>
         <div className='createTaskHeader'>
-          New task
-        </div>
-        <div className='createTaskContent'>
           <TextField
             id="taskName"
             label="Name"
-            value={Name}/>
+            value={Name}
+            onChange={this.handleTextChange('Name')}/>
+        </div>
+        <div className='createTaskContent'>
+          <TextField
+            id="tasktype"
+            select
+            label="Task Type"
+            value={TaskType}
+            onChange={event => this.setState({TaskType: event.target.value})}
+            helperText="What type of task is this">
+            {tasktypes.map(option => (
+              <MenuItem key={option} value={option}>
+                {option}
+              </MenuItem>
+            ))}
+          </TextField>
           <TextField
             id="recurrance"
             select
@@ -88,7 +108,8 @@ export default class CreateTask extends React.Component {
             ))}
           </TextField>
           {showWeekdayPicker 
-            && <div><FormLabel component="legend">Weekdays</FormLabel>
+            && <div className='createTaskRecurranceDetails'>
+            <FormLabel component="legend">Weekdays</FormLabel>
             {['s', 'm', 't', 'w', 'th', 'f', 'sa'].map(
               weekday => (
                 <FormControlLabel
@@ -102,6 +123,7 @@ export default class CreateTask extends React.Component {
             ))}</div>}
           {showMonthDayPicker
             && <TextField
+            className='createTaskRecurranceDetails'
             id="monthDay"
             label="Day of Month"
             value={Recurrance.MonthDay}
@@ -113,6 +135,7 @@ export default class CreateTask extends React.Component {
           {showDatePicker  
             && <DatePicker
               {...datePickerProps[Recurrance.Type]}
+              className='createTaskRecurranceDetails'
               id="deadline"
               allowKeyboardControl
               autoOk
@@ -141,9 +164,8 @@ export default class CreateTask extends React.Component {
             value={Description}
             onChange={this.handleTextChange('Description')}
             label="Description"/>
-          <div/>
           <Button 
-            className='createTaskButton'
+            className='createTaskButton cancelButton'
             variant="outlined"
             color="secondary"
             onClick={this.props.disactivate}>

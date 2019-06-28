@@ -15,6 +15,7 @@ export default class Home extends React.Component {
         tasks: undefined,
         createActive: false,
       }
+      this.createTaskRef = React.createRef();
     }
     componentDidMount() {
       this.getName();
@@ -68,6 +69,7 @@ export default class Home extends React.Component {
     
     render() {
         const theme = this.createTheme();
+        const createTask = this.createTaskRef.current
         
         return (
             <MuiThemeProvider theme={theme}>
@@ -78,13 +80,20 @@ export default class Home extends React.Component {
             </AppBar>
             <div className='content'>
                 {this.state.tasks != undefined && Object.keys(this.state.tasks).map(this.renderTask)}
-                {!this.state.createActive && <Fab color="primary" aria-label="Add" className='createFab'onClick={event => {
-                  this.setState({createActive: true})
+                {!this.state.createActive 
+                  && <Fab 
+                    color="primary" 
+                    aria-label="Add" 
+                    className='createFab'
+                    onClick={event => {
+                      this.setState({createActive: true})
+                      createTask.setState(createTask.startingState());
                 }}>
                   <AddIcon />
                 </Fab>}
             </div>
-            <CreateTask 
+            <CreateTask
+              ref={this.createTaskRef}
               active={this.state.createActive}
               disactivate={() => this.setState({createActive: false})}></CreateTask>
             </MuiThemeProvider>

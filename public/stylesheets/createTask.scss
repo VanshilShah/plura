@@ -31,13 +31,22 @@ div.createTaskActive{
 .createTaskContent{
   @include padding($padding-m);
   display: grid;
-  grid-template-columns: 15% 15% 25% 15% 15%;
+  grid-template-columns: 15% 15% 15% 15% 15% 15%;
   gap: $padding-m;
+}
+
+.createTaskRecurranceDetails{
+  grid-column-end: 5;
+  grid-column-start: 3;
 }
 
 .createTaskDescription{
   grid-column-end: 3;
   grid-column-start: 1;
+}
+
+.cancelButton{
+  grid-column-start: 5;
 }
 
 Button.createTaskButton{
