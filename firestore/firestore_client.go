@@ -2,6 +2,7 @@ package firestore
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"cloud.google.com/go/firestore"
@@ -78,4 +79,20 @@ func buildTaskHeirarchy(tasks []*models.Task) map[string]*models.Task {
 		}
 	}
 	return taskMap
+}
+
+// SaveTask saves a new task or updates an existing one
+func SaveTask(ctx context.Context, task models.Task) bool {
+	fmt.Println(task)
+	var err error
+	task.Children = nil
+	if task.ID == "" {
+		_, _, err = client.Collection("tasks").Add(ctx, task)
+	} else {
+		_, err = client.Collection("tasks").Doc(task.ID).Set(ctx, task)
+	}
+	if err != nil {
+		fmt.Println(err)
+	}
+	return err == nil
 }

@@ -20,13 +20,13 @@ export default class CreateTask extends React.Component {
           Type: 'once',
           Deadline: moment(),
           Weekdays: {
-            s: false,
-            m: false,
-            t: false,
-            w: false,
-            th: false,
-            f: false,
-            sa: false
+            S: false,
+            M: false,
+            T: false,
+            W: false,
+            TH: false,
+            F: false,
+            SA: false
           },
           MonthDay: 1,
           YearDay: moment()
@@ -46,6 +46,7 @@ export default class CreateTask extends React.Component {
     }
 
     handleWeekdayChange = (event, bool) => {
+      console.log(event.target.value)
       const {Recurrance} = this.state;
       this.setState({Recurrance: {...Recurrance, Weekdays: {...Recurrance.Weekdays, [event.target.value]: event.target.checked}}});
     }
@@ -57,10 +58,11 @@ export default class CreateTask extends React.Component {
 
     render() {
 
-      const {Name, Description, isSubTask, TaskType, Duration, ChunkSize, Recurrance} = this.state;
+      const {Name, Description, TaskType, Duration, ChunkSize, Recurrance} = this.state;
       const {Weekdays} = Recurrance;
       const classes = 'createTask' + (this.props.active? ' createTaskActive':' createTaskSlideOut');
       const recurranceTypes = ['once','weekly', 'monthly', 'yearly'];
+      const weekdays = ['S', 'M', 'T', 'W', 'TH', 'F', 'SA'];
       const showWeekdayPicker = Recurrance.Type == 'weekly';
       const showMonthDayPicker = Recurrance.Type == 'monthly';
       const showDatePicker = Recurrance.Type == 'once' || Recurrance.Type == 'yearly';
@@ -110,7 +112,7 @@ export default class CreateTask extends React.Component {
           {showWeekdayPicker 
             && <div className='createTaskRecurranceDetails'>
             <FormLabel component="legend">Weekdays</FormLabel>
-            {['s', 'm', 't', 'w', 'th', 'f', 'sa'].map(
+            {weekdays.map(
               weekday => (
                 <FormControlLabel
                 key={weekday}
@@ -128,7 +130,7 @@ export default class CreateTask extends React.Component {
             label="Day of Month"
             value={Recurrance.MonthDay}
             error={Recurrance.MonthDay > 31 || Recurrance.MonthDay < 1}
-            onChange={event => this.setState({Recurrance: {...Recurrance, MonthDay: event.target.value}})}
+            onChange={event => this.setState({Recurrance: {...Recurrance, MonthDay: parseInt(event.target.value)}})}
             inputProps={{ min: "1", max: "31", step: "1" }}
             type="number"
           />}
@@ -159,7 +161,7 @@ export default class CreateTask extends React.Component {
           <TextField
             id="description"
             multiline
-            rows="4"
+            rows="3"
             className={'createTaskDescription'}
             value={Description}
             onChange={this.handleTextChange('Description')}
@@ -174,7 +176,8 @@ export default class CreateTask extends React.Component {
           <Button 
             className='createTaskButton'
             variant="contained"
-            color="primary">
+            color="primary"
+            onClick={() => this.props.save({...this.state})}>
               Save
           </Button>
         </div>

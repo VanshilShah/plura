@@ -44,6 +44,25 @@ export default class Home extends React.Component {
       }
     }
 
+    saveTask = async(task) => {
+      try{
+        const res = await fetch('/api/tasks', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(task)
+        });
+        if (res.status == 200){
+          this.setState({createActive: false});
+        }
+        console.log(res);
+      }catch (err) {
+        console.log(err);
+      }
+    }
+
     createTheme() {
         var primaryColor = '#ffcb05', secondaryColor = '#00b5cc';
         return createMuiTheme({
@@ -94,7 +113,8 @@ export default class Home extends React.Component {
             <CreateTask
               ref={this.createTaskRef}
               active={this.state.createActive}
-              disactivate={() => this.setState({createActive: false})}></CreateTask>
+              disactivate={() => this.setState({createActive: false})}
+              save={this.saveTask}/>
             </MuiThemeProvider>
         );
     }    

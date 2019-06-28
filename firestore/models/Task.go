@@ -41,8 +41,8 @@ type ChildTask struct {
 
 // Task represents a task
 type Task struct {
-	ID          string `firestore:"id,omitempty"`
-	Name        string `firestore:"name,omitempty"`
+	ID          string `firestore,json:"id,omitempty"`
+	Name        string `firestore,json:"name,omitempty"`
 	Description string `firestore:"description,omitempty"`
 	Duration    int    `firestore:"duration,omitempty"` // in minutes
 	ChunkSize   int    `firestore:"chunk,omitempty"`    // in minutes
@@ -50,13 +50,14 @@ type Task struct {
 		Type     RecurranceType `firestore:"type,omitempty"`
 		Deadline time.Time      `firestore:"deadline,omitempty"`
 		Weekdays struct {
-			s  bool
-			m  bool
-			t  bool
-			w  bool
-			th bool
-			f  bool
-		} `firestore:"weekdays,omitempty"`
+			S  bool `firestore:"s"`
+			M  bool `firestore:"m"`
+			T  bool `firestore:"t"`
+			W  bool `firestore:"w"`
+			TH bool `firestore:"th"`
+			F  bool `firestore:"f"`
+			SA bool `firestore:"sa"`
+		} `firestore:"weekdays"`
 		MonthDay int       `firestore:"monthday,omitempty"`
 		YearDay  time.Time `firestore:"yearday,omitempty"`
 	} `firestore:"recurrance,omitempty"`
@@ -64,8 +65,8 @@ type Task struct {
 	Owner     *firestore.DocumentRef   `firestore:"owner,omitempty"`
 	Parent    *firestore.DocumentRef   `firestore:"parent,omitempty"`
 	Tags      []*firestore.DocumentRef `firestore:"tasks,omitempty"`
-	Children  []ChildTask
-	Completed bool `firestore:"completed,omitempty"`
+	Children  []ChildTask              `firestore:"children"`
+	Completed bool                     `firestore:"completed,omitempty"`
 }
 
 // TaskFrom creates a new Task object from a Document snapshot

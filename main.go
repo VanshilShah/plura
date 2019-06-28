@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 
 	"github.com/VanshilShah/plura/firestore"
+	"github.com/VanshilShah/plura/firestore/models"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -39,6 +41,21 @@ func main() {
 			c.JSON(http.StatusOK, gin.H{
 				"tasks": firestore.GetTasks(c),
 			})
+		})
+		api.POST("/tasks", func(c *gin.Context) {
+			// data, _ := c.GetRawData()
+			// fmt.Println(string(data))
+			var task models.Task
+			err := c.BindJSON(&task)
+			if err != nil {
+				fmt.Println(err)
+			}
+			if firestore.SaveTask(c, task) {
+				c.JSON(200, gin.H{})
+			} else {
+				c.JSON(400, gin.H{})
+			}
+
 		})
 	}
 	// Start and run the server
