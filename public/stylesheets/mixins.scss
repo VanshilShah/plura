@@ -211,6 +211,9 @@
   }
   .none{
     @include none();
+  }  
+  button.none{
+    @include none();
   }
   
   @mixin float($float){

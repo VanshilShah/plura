@@ -1,4 +1,5 @@
-import { Button, Card, Checkbox } from '@material-ui/core';
+import { Button, Card, Checkbox, IconButton } from '@material-ui/core';
+import { Edit } from '@material-ui/icons';
 import moment from 'moment';
 import React from 'react';
 
@@ -17,6 +18,13 @@ export default class TaskCard extends React.Component {
                 <p className='none f-left'>{this.state.Name}</p>
                 <p className='none f-left'>{moment(this.state.Deadline).format("ddd, MMM Do, hA")}</p>
                 <p className='none f-left'>{moment.duration(this.state.Duration, 'm').humanize()}</p>
+                <IconButton 
+                  color='white'
+                  className='none f-right'
+                  aria-label='Edit'
+                  onClick={this.props.editTask(this.state.ID)}>
+                  <Edit />
+                </IconButton>
                 <div className='clear'></div>
             </div>
             <div className='taskCardContent'>

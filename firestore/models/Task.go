@@ -47,7 +47,7 @@ type Task struct {
 	Duration    int    `firestore:"duration,omitempty"` // in minutes
 	ChunkSize   int    `firestore:"chunk,omitempty"`    // in minutes
 	Recurrance  struct {
-		Type     RecurranceType `firestore:"recurrance,omitempty"`
+		Type     RecurranceType `firestore:"type,omitempty"`
 		Deadline time.Time      `firestore:"deadline,omitempty"`
 		Weekdays struct {
 			s  bool
@@ -59,7 +59,7 @@ type Task struct {
 		} `firestore:"weekdays,omitempty"`
 		MonthDay int       `firestore:"monthday,omitempty"`
 		YearDay  time.Time `firestore:"yearday,omitempty"`
-	}
+	} `firestore:"recurrance,omitempty"`
 	TaskType  TaskType                 `firestore:"type,omitempty"`
 	Owner     *firestore.DocumentRef   `firestore:"owner,omitempty"`
 	Parent    *firestore.DocumentRef   `firestore:"parent,omitempty"`
