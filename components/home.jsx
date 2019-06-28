@@ -84,7 +84,9 @@ export default class Home extends React.Component {
                   <AddIcon />
                 </Fab>}
             </div>
-            <CreateTask active={this.state.createActive}></CreateTask>
+            <CreateTask 
+              active={this.state.createActive}
+              disactivate={() => this.setState({createActive: false})}></CreateTask>
             </MuiThemeProvider>
         );
     }    

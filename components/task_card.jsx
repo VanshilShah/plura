@@ -41,7 +41,6 @@ export default class TaskCard extends React.Component {
     renderChildTask = childTask => {
       return (<Button 
         className='childTask'
-        style={{display:'block'}}
         key={childTask.ID}
         variant="contained"
         color="secondary">

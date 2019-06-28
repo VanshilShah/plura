@@ -1,5 +1,5 @@
 import MomentUtils from '@date-io/moment';
-import { Checkbox, FormControlLabel, FormLabel, MenuItem, Paper, TextField } from '@material-ui/core';
+import { Button, Checkbox, FormControlLabel, FormLabel, MenuItem, Paper, TextField } from '@material-ui/core';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
 import React from 'react';
@@ -9,6 +9,8 @@ export default class CreateTask extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
+        Name: '',
+        Description: '',
         Recurrance: {
           Type: 'once',
           Deadline: moment(),
@@ -52,7 +54,7 @@ export default class CreateTask extends React.Component {
 
       const {Name, Description, Duration, ChunkSize, Recurrance} = this.state;
       const {Weekdays} = Recurrance;
-      const classes = 'createTask' + (this.props.active? ' createTaskActive':'');
+      const classes = 'createTask' + (this.props.active? ' createTaskActive':' createTaskSlideOut');
       const showWeekdayPicker = Recurrance.Type == 'weekly';
       const showMonthDayPicker = Recurrance.Type == 'monthly';
       const showDatePicker = Recurrance.Type == 'once' || Recurrance.Type == 'yearly';
@@ -135,12 +137,24 @@ export default class CreateTask extends React.Component {
             id="description"
             multiline
             rows="4"
+            className={'createTaskDescription'}
             value={Description}
             onChange={this.handleTextChange('Description')}
             label="Description"/>
-          <TextField
-            id="name"
-            label="Name"/>
+          <div/>
+          <Button 
+            className='createTaskButton'
+            variant="outlined"
+            color="secondary"
+            onClick={this.props.disactivate}>
+              Cancel
+          </Button>
+          <Button 
+            className='createTaskButton'
+            variant="contained"
+            color="primary">
+              Save
+          </Button>
         </div>
       </Paper></MuiPickersUtilsProvider>);
             

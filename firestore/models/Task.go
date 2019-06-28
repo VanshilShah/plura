@@ -9,6 +9,8 @@ import (
 
 // TaskType represents the different type of tasks that the application will handle.
 type TaskType string
+
+// RecurranceType represents the type of reccurance a task can have.
 type RecurranceType string
 
 const (

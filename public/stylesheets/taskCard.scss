@@ -34,10 +34,7 @@
     // @include none();
     @include margin-v($margin-s);
     @include no-decor();
-    @include accent-bg();
-    @include text-on-primary();
     display: block;
-    border-radius: 3px;
   }
   
   .completedCheckbox{

@@ -1,39 +1,57 @@
 $create-task-height: 400px;
 
-.createTask{
-    @include fill-w();
-    max-height: 0px;
-    position: absolute;
-    bottom: 0;
-    overflow: hidden;
+div.createTask{
+  @include fill-w();
+  // max-height: 0px;
+  height: 0px;
+  position: absolute;
+  bottom: 0;
+  overflow: hidden;
+  transition-property: all;
+  transition-duration: 1s;
+  transition-timing-function: ease;
 }
-.createTaskActive{
-    max-height: $create-task-height+100px;
-    height: $create-task-height;
-    display: block;
-    animation-name: fadein;
-    animation-duration: 0.65s;
-    animation-timing-function: cubic-bezier(0.27, 0.04, 0.27, 1.55);
+div.createTaskActive{
+  max-height: $create-task-height+100px;
+  height: $create-task-height;
+  display: block;
+  transition-duration: 0.65s;
+  transition-timing-function: cubic-bezier(0.27, 0.04, 0.27, 1.55);
 }
 
 .createTaskHeader{
-    @include none();
-    @include accent-bg();
-    @include text-on-primary();
-    @include padding($padding-m);
-    display: flex;
-    justify-content: space-between;
-  }
+  @include none();
+  @include accent-bg();
+  @include text-on-primary();
+  @include padding($padding-m);
+  display: flex;
+  justify-content: space-between;
+}
   
-  .createTaskContent{
-    @include padding($padding-m);
-    display: grid;
-    grid-template-columns: 15% 15% 15% 15% 15%;
-    gap: $padding-m;
-  }
+.createTaskContent{
+  @include padding($padding-m);
+  display: grid;
+  grid-template-columns: 15% 15% 25% 15% 15%;
+  gap: $padding-m;
+}
+
+.createTaskDescription{
+  grid-column-end: 3;
+  grid-column-start: 1;
+}
+
+Button.createTaskButton{
+  // @include none();
+  @include margin-v($margin-s);
+  @include no-decor();
+  @include fill-w($padding-m);
+  align-self: flex-end;
+  height: 45px;
+  display: block;
+}
 
 /* Standard syntax */
-@keyframes fadein {
+@keyframes slidein {
     from {height: 0px;}
     to {height: $create-task-height;}
 }
