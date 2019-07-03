@@ -23,6 +23,9 @@ func main() {
 
 	// Serve frontend static files
 	router.Use(static.Serve("/", static.LocalFile("./public", true)))
+	router.NoRoute(func(c *gin.Context) {
+		c.File("./public/index.html")
+	})
 
 	// Setup route group for the API
 	api := router.Group("/api")

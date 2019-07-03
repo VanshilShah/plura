@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import Dashboard from './dashboard';
 
 
@@ -41,16 +42,20 @@ class App extends React.Component {
     render() {
       const theme = this.createTheme();
       return (
-        <MuiThemeProvider theme={theme}>
-        <SnackbarProvider maxSnack={3}>
+        <Router>
+        <Route  path="/" component={Dashboard}>
+          <MuiThemeProvider theme={theme}>
+          <SnackbarProvider maxSnack={3}>
               <AppBar position="absolute" className='appBar'>
                 <Typography component="h1" variant="h6" className='none' noWrap>
                   Plura
                 </Typography>
               </AppBar>
-            <Dashboard/>
-        </SnackbarProvider>
-        </MuiThemeProvider>)
+              <Route  path="/dashboard" component={Dashboard}></Route>
+          </SnackbarProvider>
+          </MuiThemeProvider>
+        </Route>
+        </Router>)
     }    
   }
 
