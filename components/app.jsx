@@ -1,5 +1,6 @@
 'use strict'
 
+import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Home from './home';
@@ -11,7 +12,10 @@ class App extends React.Component {
     }
 
     render() {
-      return (<Home/>)
+      return (
+        <SnackbarProvider maxSnack={3}>
+          <Home/>
+        </SnackbarProvider>)
     }    
   }
 

@@ -5,11 +5,12 @@ import Fab from '@material-ui/core/Fab';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
+import { withSnackbar } from 'notistack';
 import React from 'react';
 import CreateTask from './create_task';
 import TaskCard from './task_card';
 
-export default class Home extends React.Component {
+class Home extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
@@ -21,6 +22,7 @@ export default class Home extends React.Component {
       }
       this.createTaskRef = React.createRef();
     }
+
     componentDidMount() {
       this.getName();
       this.getTasks();
@@ -33,6 +35,7 @@ export default class Home extends React.Component {
         console.log(json)
         this.setState({name: json.name});
       } catch (err){
+        this.props.enqueueSnackbar('Could not load user info', {variant: 'warning'});
         console.log(err);
       }
     }
@@ -44,6 +47,7 @@ export default class Home extends React.Component {
         console.log(json.tasks)
         this.setState({tasks: json.tasks});
       } catch (err){
+        this.props.enqueueSnackbar('Could not load tasks', {variant: 'warning'});
         console.log(err);
       }
     }
@@ -60,10 +64,12 @@ export default class Home extends React.Component {
         });
         if (res.status == 200){
           this.setState({createActive: false});
+          this.props.enqueueSnackbar('Task Saved', {variant: 'success'});
           this.getTasks()
         }
         console.log(res);
       }catch (err) {
+        this.props.enqueueSnackbar('Could not save task', {variant: 'error'});
         console.log(err);
       }
     }
@@ -82,10 +88,12 @@ export default class Home extends React.Component {
         if (res.status == 200){
           this.cancelDeleteTask();
           this.setState({createActive: false});
+          this.props.enqueueSnackbar('Task Deleted', {variant: 'success'});
           this.getTasks()
         }
         console.log(res);
       }catch (err) {
+        this.props.enqueueSnackbar('Could not delete task', {variant: 'error'});
         console.log(err);
       }
     }
@@ -126,31 +134,31 @@ export default class Home extends React.Component {
         
         return (
             <MuiThemeProvider theme={theme}>
-            {this.renderDeleteDialog()}
-            <AppBar position="absolute" className='appBar'>
-              <Typography component="h1" variant="h6" className='none' noWrap>
-                Plura
-              </Typography>
-            </AppBar>
-            <div className='content'>
-                {this.state.tasks != undefined && Object.keys(this.state.tasks).map(this.renderTask)}
-                {!this.state.createActive 
-                  && <Fab 
-                    color="primary" 
-                    aria-label="Add" 
-                    className='createFab'
-                    onClick={event => {
-                      this.createTask(createTaskComponent.startingState())
-                }}>
-                  <AddIcon />
-                </Fab>}
-            </div>
-            <CreateTask
-              ref={this.createTaskRef}
-              active={this.state.createActive}
-              disactivate={() => this.setState({createActive: false})}
-              deleteTask={this.openDeleteTask}
-              save={this.saveTask}/>
+              {this.renderDeleteDialog()}
+              <AppBar position="absolute" className='appBar'>
+                <Typography component="h1" variant="h6" className='none' noWrap>
+                  Plura
+                </Typography>
+              </AppBar>
+              <div className='content'>
+                  {this.state.tasks != undefined && Object.keys(this.state.tasks).map(this.renderTask)}
+                  {!this.state.createActive 
+                    && <Fab 
+                      color="primary" 
+                      aria-label="Add" 
+                      className='createFab'
+                      onClick={event => {
+                        this.createTask(createTaskComponent.startingState())
+                  }}>
+                    <AddIcon />
+                  </Fab>}
+              </div>
+              <CreateTask
+                ref={this.createTaskRef}
+                active={this.state.createActive}
+                disactivate={() => this.setState({createActive: false})}
+                deleteTask={this.openDeleteTask}
+                save={this.saveTask}/>
             </MuiThemeProvider>
         );
     }    
@@ -197,3 +205,5 @@ export default class Home extends React.Component {
     return key!= 'root' && (<TaskCard key={key} task={task} editTask={this.editTask}/>)
     }
   }
+
+  export default withSnackbar(Home)

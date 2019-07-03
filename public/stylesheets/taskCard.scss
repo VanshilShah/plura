@@ -1,7 +1,8 @@
- .taskCard{
+ div.taskCard{
     @include margin($margin-m);
     // @include padding($padding-m);
     width: 500px;
+    border-radius: 0px;
   }
   
   .taskCardHeader{

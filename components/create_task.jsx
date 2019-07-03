@@ -53,8 +53,8 @@ export default class CreateTask extends React.Component {
       this.setState({Recurrance: {...Recurrance, Weekdays: {...Recurrance.Weekdays, [event.target.value]: event.target.checked}}});
     }
 
-    handleTextChange = name => event => {
-      this.setState({[name]: event.target.value})
+    handleTextChange = (name, useInt=false) => event => {
+      this.setState({[name]: useInt ? parseInt(event.target.value) : event.target.value})
     };
   
     
@@ -158,7 +158,7 @@ export default class CreateTask extends React.Component {
             id="duration"
             label="Duration (hours)"
             value={Duration}
-            onChange={this.handleTextChange('Duration')}
+            onChange={this.handleTextChange('Duration', true)}
             type="number"
           />
           <TextField
@@ -166,7 +166,7 @@ export default class CreateTask extends React.Component {
             label="Chunk Size (hours)"
             value={ChunkSize}
             helperText="How long each chunk should be scheduled"
-            onChange={this.handleTextChange('ChunkSize')}
+            onChange={this.handleTextChange('ChunkSize', true)}
             type="number"
           />
           <TextField
