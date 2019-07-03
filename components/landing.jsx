@@ -14,6 +14,7 @@ class Landing extends React.Component {
     render() {
         return (
             <div className='landingContent'>
+                <div className='clouds'/>
                 <div className='landingWelcome'>
                 <Typography variant="h1" component="h2" gutterBottom>
                     Welcome to Plura
