@@ -1,9 +1,13 @@
 'use strict'
 
+import AppBar from '@material-ui/core/AppBar';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Dashboard from './dashboard';
+
 
 class App extends React.Component {
     constructor(props) {
@@ -11,11 +15,42 @@ class App extends React.Component {
       this.state = {}
     }
 
+    createTheme() {
+      var primaryColor = '#ffcb05', secondaryColor = '#00b5cc';
+      return createMuiTheme({
+        palette: {
+          primary: {
+            light: primaryColor,
+            main: primaryColor,
+            dark: primaryColor,
+            contrastText: '#fff',
+          },
+          secondary: {
+            light: secondaryColor,
+            main: secondaryColor,
+            dark: secondaryColor,
+            contrastText: '#fff',
+          },
+        },
+        typography: {
+          useNextVariants: true
+        }
+      });
+  }
+
     render() {
+      const theme = this.createTheme();
       return (
+        <MuiThemeProvider theme={theme}>
         <SnackbarProvider maxSnack={3}>
-          <Dashboard/>
-        </SnackbarProvider>)
+              <AppBar position="absolute" className='appBar'>
+                <Typography component="h1" variant="h6" className='none' noWrap>
+                  Plura
+                </Typography>
+              </AppBar>
+            <Dashboard/>
+        </SnackbarProvider>
+        </MuiThemeProvider>)
     }    
   }
 

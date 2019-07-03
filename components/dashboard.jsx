@@ -1,9 +1,6 @@
 import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
 import Dialog from '@material-ui/core/Dialog';
 import Fab from '@material-ui/core/Fab';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import { withSnackbar } from 'notistack';
 import React from 'react';
@@ -105,61 +102,32 @@ class Dashboard extends React.Component {
       this.setState({showDeleteTaskDialog: true, deletingTask: key})
     }
 
-    createTheme() {
-        var primaryColor = '#ffcb05', secondaryColor = '#00b5cc';
-        return createMuiTheme({
-          palette: {
-            primary: {
-              light: primaryColor,
-              main: primaryColor,
-              dark: primaryColor,
-              contrastText: '#fff',
-            },
-            secondary: {
-              light: secondaryColor,
-              main: secondaryColor,
-              dark: secondaryColor,
-              contrastText: '#fff',
-            },
-          },
-          typography: {
-            useNextVariants: true
-          }
-        });
-    }
+    
     
     render() {
-        const theme = this.createTheme();
         const createTaskComponent = this.createTaskRef.current
         
         return (
-            <MuiThemeProvider theme={theme}>
-              {this.renderDeleteDialog()}
-              <AppBar position="absolute" className='appBar'>
-                <Typography component="h1" variant="h6" className='none' noWrap>
-                  Plura
-                </Typography>
-              </AppBar>
-              <div className='content'>
-                  {this.state.tasks != undefined && Object.keys(this.state.tasks).map(this.renderTask)}
-                  {!this.state.createActive 
-                    && <Fab 
-                      color="primary" 
-                      aria-label="Add" 
-                      className='createFab'
-                      onClick={event => {
-                        this.createTask(createTaskComponent.startingState())
-                  }}>
-                    <AddIcon />
-                  </Fab>}
-              </div>
+            <div className='content'>
+                {this.renderDeleteDialog()}
+                {this.state.tasks != undefined && Object.keys(this.state.tasks).map(this.renderTask)}
+                {!this.state.createActive 
+                  && <Fab 
+                    color="primary" 
+                    aria-label="Add" 
+                    className='createFab'
+                    onClick={event => {
+                      this.createTask(createTaskComponent.startingState())
+                }}>
+                  <AddIcon />
+                </Fab>}
               <CreateTask
                 ref={this.createTaskRef}
                 active={this.state.createActive}
                 disactivate={() => this.setState({createActive: false})}
                 deleteTask={this.openDeleteTask}
                 save={this.saveTask}/>
-            </MuiThemeProvider>
+            </div>
         );
     }    
 
