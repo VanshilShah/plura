@@ -1,5 +1,6 @@
 'use strict'
 
+import { Button, Toolbar } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -8,6 +9,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Dashboard from './dashboard';
+import Landing from './landing';
 
 
 class App extends React.Component {
@@ -39,24 +41,28 @@ class App extends React.Component {
       });
   }
 
-    render() {
-      const theme = this.createTheme();
-      return (
-        <Router>
-        <Route  path="/" component={Dashboard}>
-          <MuiThemeProvider theme={theme}>
-          <SnackbarProvider maxSnack={3}>
-              <AppBar position="absolute" className='appBar'>
-                <Typography component="h1" variant="h6" className='none' noWrap>
-                  Plura
-                </Typography>
-              </AppBar>
-              <Route  path="/dashboard" component={Dashboard}></Route>
-          </SnackbarProvider>
-          </MuiThemeProvider>
-        </Route>
-        </Router>)
-    }    
-  }
+  render() {
+    const theme = this.createTheme();
+    return (
+      <Router>
+      <Route  path="/" component={Dashboard}>
+        <MuiThemeProvider theme={theme}>
+        <SnackbarProvider maxSnack={3}>
+          <Route exact path="/" component={Landing}></Route>
+          <Route path="/dashboard" component={Dashboard}></Route>
+          <AppBar position="absolute" >
+            <Toolbar className='appBar'>
+              <Typography variant="h6" className='appBarText'>
+                Plura
+              </Typography>
+              <Button color="inherit">Login</Button>
+            </Toolbar>
+          </AppBar>
+        </SnackbarProvider>
+        </MuiThemeProvider>
+      </Route>
+      </Router>)
+  }    
+}
 
 ReactDOM.render(<App/>, document.getElementById('app'));

@@ -11,27 +11,32 @@ $margin-b: 24px;
 $margin-m: 16px;
 $margin-s: 8px;
 
-$app-bar-height: 45px;
+$app-bar-height: 48px;
 
 @import url('https://fonts.googleapis.com/css?family=Assistant&display=swap');
+@import 'landing.scss';
 @import 'mixins.scss';
 @import 'taskCard.scss';
 @import 'createTask.scss';
 
 //~~~~~~~~COMPONENTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.appBar{
+div.appBar{
   height: $app-bar-height;
-  padding: $padding-s $padding-m $padding-s $padding-m;
+  // padding: $padding-s $padding-m $padding-s $padding-m;
   color: $text-on-primary;
+}
+.appBarText{
+  flex-grow: 1;
 }
 
 .content{
+  overflow: hidden;
   @include fill-v($app-bar-height);
   @include padding($padding-b);
   position: relative;
-  background: $background;
-  margin: $app-bar-height 0 0 0;
+  background-color: $background;
+  margin-top: $app-bar-height;
 }
 
 Button.createFab{
