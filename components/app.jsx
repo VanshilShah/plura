@@ -3,7 +3,7 @@
 import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Home from './home';
+import Dashboard from './dashboard';
 
 class App extends React.Component {
     constructor(props) {
@@ -14,7 +14,7 @@ class App extends React.Component {
     render() {
       return (
         <SnackbarProvider maxSnack={3}>
-          <Home/>
+          <Dashboard/>
         </SnackbarProvider>)
     }    
   }

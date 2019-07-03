@@ -1,176 +1,209 @@
+import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
-import Badge from '@material-ui/core/Badge';
-import Container from '@material-ui/core/Container';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
-import Toolbar from '@material-ui/core/Toolbar';
+import Dialog from '@material-ui/core/Dialog';
+import Fab from '@material-ui/core/Fab';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import MenuIcon from '@material-ui/icons/Menu';
-import NotificationsIcon from '@material-ui/icons/Notifications';
-import clsx from 'clsx';
+import AddIcon from '@material-ui/icons/Add';
+import { withSnackbar } from 'notistack';
 import React from 'react';
+import CreateTask from './create_task';
+import TaskCard from './task_card';
 
-const drawerWidth = 240;
+class Dashboard extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        name: "loading",
+        tasks: undefined,
+        createActive: false,
+        showDeleteTaskDialog: false,
+        deletingTask: ''
+      }
+      this.createTaskRef = React.createRef();
+    }
 
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-  },
-  toolbar: {
-    paddingRight: 24, // keep right padding when drawer closed
-  },
-  toolbarIcon: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: '0 8px',
-    ...theme.mixins.toolbar,
-  },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-  },
-  appBarShift: {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  menuButton: {
-    marginRight: 36,
-  },
-  menuButtonHidden: {
-    display: 'none',
-  },
-  title: {
-    flexGrow: 1,
-  },
-  drawerPaper: {
-    position: 'relative',
-    whiteSpace: 'nowrap',
-    width: drawerWidth,
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-  },
-  drawerPaperClose: {
-    overflowX: 'hidden',
-    transition: theme.transitions.create('width', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    width: theme.spacing(7),
-    [theme.breakpoints.up('sm')]: {
-      width: theme.spacing(9),
-    },
-  },
-  appBarSpacer: theme.mixins.toolbar,
-  content: {
-    flexGrow: 1,
-    height: '100vh',
-    overflow: 'auto',
-  },
-  container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
-  },
-  paper: {
-    padding: theme.spacing(2),
-    display: 'flex',
-    overflow: 'auto',
-    flexDirection: 'column',
-  },
-  fixedHeight: {
-    height: 240,
-  },
-}));
+    componentDidMount() {
+      this.getName();
+      this.getTasks();
+    }
 
-export default function Dashboard() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-  const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight);
+    getName = async () => {
+      try {
+        const res = await fetch('/api/name');
+        const json = await res.json();
+        console.log(json)
+        this.setState({name: json.name});
+      } catch (err){
+        this.props.enqueueSnackbar('Could not load user info', {variant: 'warning'});
+        console.log(err);
+      }
+    }
 
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar, open && classes.appBarShift)}>
-        <Toolbar className={classes.toolbar}>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="Open drawer"
-            onClick={handleDrawerOpen}
-            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
-            Dashboard
-          </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
-        }}
-        open={open}
-      >
-        <div className={classes.toolbarIcon}>
-          <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </div>
-        <Divider />
-      </Drawer>
-      <main className={classes.content}>
-        <div className={classes.appBarSpacer} />
-        <Container maxWidth="lg" className={classes.container}>
-          <Grid container spacing={3}>
-            {/* Chart */}
-            <Grid item xs={12} md={8} lg={9}>
-              <Paper className={fixedHeightPaper}>
-                
-              </Paper>
-            </Grid>
-            {/* Recent Deposits */}
-            <Grid item xs={12} md={4} lg={3}>
-              <Paper className={fixedHeightPaper}>
-               
-              </Paper>
-            </Grid>
-            {/* Recent Orders */}
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>
-              
-              </Paper>
-            </Grid>
-          </Grid>
-        </Container>
-      </main>
-    </div>
-  );
-}
+    getTasks = async () => {
+      try {
+        const res = await fetch('/api/tasks');
+        const json = await res.json();
+        console.log(json.tasks)
+        this.setState({tasks: json.tasks});
+      } catch (err){
+        this.props.enqueueSnackbar('Could not load tasks', {variant: 'warning'});
+        console.log(err);
+      }
+    }
+
+    saveTask = async(task) => {
+      try{
+        const res = await fetch('/api/tasks', {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(task)
+        });
+        if (res.status == 200){
+          this.setState({createActive: false});
+          this.props.enqueueSnackbar('Task Saved', {variant: 'success'});
+          this.getTasks()
+        }
+        console.log(res);
+      }catch (err) {
+        this.props.enqueueSnackbar('Could not save task', {variant: 'error'});
+        console.log(err);
+      }
+    }
+
+    deleteTask = async() => {
+      try{
+        const task = this.state.tasks[this.state.deletingTask];
+        const res = await fetch('/api/tasks', {
+          method: 'DELETE',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(task)
+        });
+        if (res.status == 200){
+          this.cancelDeleteTask();
+          this.setState({createActive: false});
+          this.props.enqueueSnackbar('Task Deleted', {variant: 'success'});
+          this.getTasks()
+        }
+        console.log(res);
+      }catch (err) {
+        this.props.enqueueSnackbar('Could not delete task', {variant: 'error'});
+        console.log(err);
+      }
+    }
+    
+    cancelDeleteTask = event => {
+      this.setState({showDeleteTaskDialog: false, deletingTask: ''})
+    }
+    openDeleteTask = key => event => {
+      this.setState({showDeleteTaskDialog: true, deletingTask: key})
+    }
+
+    createTheme() {
+        var primaryColor = '#ffcb05', secondaryColor = '#00b5cc';
+        return createMuiTheme({
+          palette: {
+            primary: {
+              light: primaryColor,
+              main: primaryColor,
+              dark: primaryColor,
+              contrastText: '#fff',
+            },
+            secondary: {
+              light: secondaryColor,
+              main: secondaryColor,
+              dark: secondaryColor,
+              contrastText: '#fff',
+            },
+          },
+          typography: {
+            useNextVariants: true
+          }
+        });
+    }
+    
+    render() {
+        const theme = this.createTheme();
+        const createTaskComponent = this.createTaskRef.current
+        
+        return (
+            <MuiThemeProvider theme={theme}>
+              {this.renderDeleteDialog()}
+              <AppBar position="absolute" className='appBar'>
+                <Typography component="h1" variant="h6" className='none' noWrap>
+                  Plura
+                </Typography>
+              </AppBar>
+              <div className='content'>
+                  {this.state.tasks != undefined && Object.keys(this.state.tasks).map(this.renderTask)}
+                  {!this.state.createActive 
+                    && <Fab 
+                      color="primary" 
+                      aria-label="Add" 
+                      className='createFab'
+                      onClick={event => {
+                        this.createTask(createTaskComponent.startingState())
+                  }}>
+                    <AddIcon />
+                  </Fab>}
+              </div>
+              <CreateTask
+                ref={this.createTaskRef}
+                active={this.state.createActive}
+                disactivate={() => this.setState({createActive: false})}
+                deleteTask={this.openDeleteTask}
+                save={this.saveTask}/>
+            </MuiThemeProvider>
+        );
+    }    
+
+    renderDeleteDialog = () => {
+      return (
+        <Dialog
+          open={this.state.showDeleteTaskDialog}
+          onClose={this.cancelDeleteTask}
+          aria-labelledby="delete-dialog-title"
+          aria-describedby="delete-dialog-description">
+          <DialogTitle id="delete-dialog-title">{"Are you sure you want to delete this task?"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="delete-dialog-description">
+              Once a task is deleted, it cannot be recovered, all of the subtasks and roadblocks associated with this task will also be deleted.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+          <Button onClick={this.cancelDeleteTask} color="primary">
+            No
+          </Button>
+          <Button onClick={this.deleteTask} color="primary" variant='contained' autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </Dialog>
+      );
+    }
+
+    
+    createTask = task => {
+      const createTaskComponent = this.createTaskRef.current
+      this.setState({createActive: true})
+      createTaskComponent.setState({...task});
+    }
+
+    editTask = key => event => {
+      const task = this.state.tasks[key];
+      this.createTask(task);
+    }
+
+    renderTask = key => {
+    const task = this.state.tasks[key];
+    return key!= 'root' && (<TaskCard key={key} task={task} editTask={this.editTask}/>)
+    }
+  }
+
+  export default withSnackbar(Dashboard)
