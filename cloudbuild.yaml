@@ -1,6 +1,7 @@
 steps:
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build-release']
+  env:
   - 'FIREBASE_API_KEY=$_FIREBASE_API_KEY'
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['app', 'deploy']
