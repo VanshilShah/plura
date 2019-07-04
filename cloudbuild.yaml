@@ -2,5 +2,5 @@ steps:
 - name: 'gcr.io/cloud-builders/npm'
   args: ['build-release']
 - name: 'gcr.io/cloud-builders/gcloud'
-  args: ['app' 'deploy']
+  args: ['app', 'deploy']
   
