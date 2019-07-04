@@ -4,6 +4,7 @@ import { Button, Toolbar } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import firebase from 'firebase/app';
 // Add the Firebase services that you want to use
 import "firebase/auth";
 import "firebase/firestore";
@@ -15,12 +16,24 @@ import Dashboard from './dashboard';
 import Landing from './landing';
 
 
-
-
 class App extends React.Component {
     constructor(props) {
       super(props);
-      this.state = {}
+      this.state = {
+        isSignedIn: false
+      }
+      var firebaseConfig = {
+        apiKey: process.env.FIREBASE_API_KEY,
+        authDomain: "plura-244219.firebaseapp.com",
+        databaseURL: "https://plura-244219.firebaseio.com",
+        projectId: "plura-244219",
+        storageBucket: "plura-244219.appspot.com",
+        messagingSenderId: "869235351640",
+        appId: "1:869235351640:web:ee85b00817537af5"
+      };
+      
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
     }
 
     componentDidMount() {
