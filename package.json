@@ -7,10 +7,13 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-css": "node-sass --include-path scss public/stylesheets/stylesheet.scss public/stylesheet.css",
     "watch-css": "nodemon -e scss -x npm run build-css",
-    "watch-webpack": "npx webpack --config webpack.config.js",
-    "watch-jsx": "npx babel --watch components --out-dir public/react-components --presets react-app/prod",
+    "build-webpack-release": "npx webpack --config webpack.config.js --mode=production",
+    "watch-webpack": "npx webpack --config webpack.config.js --watch",
+    "build-jsx-release": "npx babel components --out-dir public/react-components --presets react-app/prod",
+    "watch-jsx": "npx babel --watch components --out-dir public/react-components --presets react-app/dev",
     "build-start": "npm run watch-css & npm run watch-jsx & npm run watch-webpack & gin run main.go",
-    "start": "go run main.go"
+    "start": "go run main.go",
+    "build-release": "npm install && npm run build-css && npm run build-jsx-release && npm run build-webpack-release"
   },
   "repository": {
     "type": "git",
