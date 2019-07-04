@@ -35,12 +35,18 @@
     right: 0;
     top: 0;
     z-index: 3;
-    animation:move-background 250s linear infinite;
+    animation:move-background 150s linear infinite reverse;
 }
 
 
 @keyframes move-background {
-    0%{-webkit-transform: translate3d(0px, 0px, 0px);}
-    50% {-webkit-transform: translate3d(1000px, 10%, 0px);}
-    100% {-webkit-transform: translate3d(2500px, 0px, 0px);}   
+    0%{ 
+        background-size: 600px 25%;
+        transform: translate3d(2500px, 0px, 0px);}
+    98%{ 
+	    background-size: 800px 100%;
+        transform: translate3d(25px, 10%, 0px);}
+    100% {
+	    background-size: 800px 100%;
+        transform: translate3d(0px, 15%, 0px);}   
 }
