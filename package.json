@@ -31,6 +31,7 @@
     "babel-cli": "^6.26.0",
     "babel-preset-react-app": "^3.1.2",
     "babel-runtime": "^6.26.0",
+    "firebase": "^6.2.4",
     "moment": "^2.24.0",
     "notistack": "^0.8.7",
     "react": "^16.8.6",

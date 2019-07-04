@@ -4,6 +4,9 @@ import { Button, Toolbar } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+// Add the Firebase services that you want to use
+import "firebase/auth";
+import "firebase/firestore";
 import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -12,10 +15,16 @@ import Dashboard from './dashboard';
 import Landing from './landing';
 
 
+
+
 class App extends React.Component {
     constructor(props) {
       super(props);
       this.state = {}
+    }
+
+    componentDidMount() {
+      
     }
 
     createTheme() {
