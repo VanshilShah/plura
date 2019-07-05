@@ -5,13 +5,12 @@ import AppBar from '@material-ui/core/AppBar';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import firebase from 'firebase/app';
-// Add the Firebase services that you want to use
 import "firebase/auth";
 import "firebase/firestore";
 import { SnackbarProvider } from 'notistack';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
 import Dashboard from './dashboard';
 import Landing from './landing';
 
@@ -31,13 +30,21 @@ class App extends React.Component {
         messagingSenderId: "869235351640",
         appId: "1:869235351640:web:ee85b00817537af5"
       };
-      
-      // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
     }
 
     componentDidMount() {
+      this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
+          (user) => {
+            console.log("signed in: ", !!user);
+            this.setState({isSignedIn: !!user})
+          }
+      );
       
+    }
+
+    componentWillUnmount() {
+      this.unregisterAuthObserver();
     }
 
     createTheme() {
@@ -67,24 +74,36 @@ class App extends React.Component {
     const theme = this.createTheme();
     return (
       <Router>
-      <Route  path="/" component={Dashboard}>
         <MuiThemeProvider theme={theme}>
         <SnackbarProvider maxSnack={3}>
-          <Route exact path="/" component={Landing}></Route>
-          <Route path="/dashboard" component={Dashboard}></Route>
+          <Route exact path="/" component={Landing}>
+            {this.state.isSignedIn && <Redirect to="/dashboard"/>}
+          </Route>
+          <Route path="/dashboard"  render={(props) => <Dashboard {...props} isSignedIn={this.state.isSignedIn}/>}>
+            {!this.state.isSignedIn && <Redirect to="/"/>}
+          </Route>
           <AppBar position="absolute" >
             <Toolbar className='appBar'>
               <Typography variant="h6" className='appBarText'>
                 Plura
               </Typography>
-              <Button color="inherit">Login</Button>
+              {!this.state.isSignedIn && <Button color="inherit">Login</Button>}
+              {this.state.isSignedIn && <Button color="inherit" onClick={this.signOut}>Sign Out</Button>}
             </Toolbar>
           </AppBar>
         </SnackbarProvider>
         </MuiThemeProvider>
-      </Route>
       </Router>)
-  }    
+  }
+
+  signOut = async event => {
+    try {
+      await firebase.auth().signOut()
+      
+    } catch (e) {
+      console.log(e);
+    }
+  }
 }
 
 ReactDOM.render(<App/>, document.getElementById('app'));

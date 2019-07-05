@@ -2,12 +2,18 @@ import { Button, DialogActions, DialogContent, DialogContentText, DialogTitle } 
 import Dialog from '@material-ui/core/Dialog';
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
+import firebase from 'firebase/app';
 import { withSnackbar } from 'notistack';
+import PropTypes from 'prop-types';
 import React from 'react';
 import CreateTask from './create_task';
 import TaskCard from './task_card';
 
 class Dashboard extends React.Component {
+    static contextTypes = {
+      router: PropTypes.object
+    }
+
     constructor(props) {
       super(props);
       this.state = {
@@ -21,13 +27,28 @@ class Dashboard extends React.Component {
     }
 
     componentDidMount() {
-      this.getName();
-      this.getTasks();
+      if (this.props.isSignedIn) {
+        var user = firebase.auth().currentUser;
+
+        if (user != null) {
+          this.getName();
+          this.getTasks();
+        }
+       
+      }
     }
 
     getName = async () => {
       try {
-        const res = await fetch('/api/name');
+        const idToken = await firebase.auth().currentUser.getIdToken();
+        const res = await fetch('/api/name', {
+          method: 'GET',
+          withCredentials: true,
+          credentials: 'include',
+          headers: {
+            'Authorization': idToken
+          }
+        });
         const json = await res.json();
         console.log(json)
         this.setState({name: json.name});
@@ -37,9 +58,17 @@ class Dashboard extends React.Component {
       }
     }
 
-    getTasks = async () => {
+    getTasks = async (user) => {
       try {
-        const res = await fetch('/api/tasks');
+        const idToken = await firebase.auth().currentUser.getIdToken();
+        const res = await fetch('/api/tasks', {
+          method: 'GET',
+          withCredentials: true,
+          credentials: 'include',
+          headers: {
+            'Authorization': idToken
+          }
+        });
         const json = await res.json();
         console.log(json.tasks)
         this.setState({tasks: json.tasks});
@@ -51,9 +80,11 @@ class Dashboard extends React.Component {
 
     saveTask = async(task) => {
       try{
+        const idToken = await firebase.auth().currentUser.getIdToken();
         const res = await fetch('/api/tasks', {
           method: 'POST',
           headers: {
+            'Authorization': idToken,
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
@@ -73,10 +104,12 @@ class Dashboard extends React.Component {
 
     deleteTask = async() => {
       try{
+        const idToken = await firebase.auth().currentUser.getIdToken();
         const task = this.state.tasks[this.state.deletingTask];
         const res = await fetch('/api/tasks', {
           method: 'DELETE',
           headers: {
+            'Authorization': idToken,
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
@@ -106,7 +139,6 @@ class Dashboard extends React.Component {
     
     render() {
         const createTaskComponent = this.createTaskRef.current
-        
         return (
             <div className='content'>
                 {this.renderDeleteDialog()}

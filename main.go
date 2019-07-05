@@ -5,8 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/VanshilShah/plura/firestore"
-	"github.com/VanshilShah/plura/firestore/models"
+	"firebase.google.com/go/auth"
+	"github.com/VanshilShah/plura/firebase"
+	"github.com/VanshilShah/plura/firebase/models"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -15,9 +16,11 @@ import (
 func main() {
 	err := godotenv.Load()
 	if err != nil {
+		fmt.Println(err)
 	}
-
-	firestore.Init()
+	firebaseApp := firebase.InitApp()
+	firestoreClient := firebase.InitFirestoreClient(firebaseApp)
+	authClient := firebase.InitAuth(firebaseApp)
 	// Set the router as the default one shipped with Gin
 	router := gin.Default()
 
@@ -29,7 +32,7 @@ func main() {
 	})
 
 	// Setup route group for the API
-	api := router.Group("/api")
+	api := router.Group("/api", authMiddleware(authClient))
 	{
 		api.GET("/", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{
@@ -38,12 +41,12 @@ func main() {
 		})
 		api.GET("/name", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{
-				"name": firestore.GetName(c),
+				"name": firebase.GetName(firestoreClient, c),
 			})
 		})
 		api.GET("/tasks", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{
-				"tasks": firestore.GetTasks(c),
+				"tasks": firebase.GetTasks(firestoreClient, c),
 			})
 		})
 		api.POST("/tasks", func(c *gin.Context) {
@@ -54,7 +57,7 @@ func main() {
 			if err != nil {
 				fmt.Println(err)
 			}
-			if firestore.SaveTask(c, task) {
+			if firebase.SaveTask(firestoreClient, c, task) {
 				c.JSON(200, gin.H{})
 			} else {
 				c.JSON(400, gin.H{})
@@ -69,7 +72,7 @@ func main() {
 			if err != nil {
 				fmt.Println(err)
 			}
-			if firestore.DeleteTask(c, task) {
+			if firebase.DeleteTask(firestoreClient, c, task) {
 				c.JSON(200, gin.H{})
 			} else {
 				c.JSON(400, gin.H{})
@@ -83,4 +86,13 @@ func main() {
 		port = "3000"
 	}
 	router.Run(":" + port)
+}
+
+func authMiddleware(authClient *auth.Client) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		_, err := firebase.VerifyRequest(authClient, c)
+		if err != nil {
+			c.JSON(401, gin.H{})
+		}
+	}
 }

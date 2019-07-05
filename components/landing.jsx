@@ -14,27 +14,21 @@ class Landing extends React.Component {
     }
 
     uiConfig = {
-        signInOptions: [
-          {
-            provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-            requireDisplayName: false
-          }
-        ]
+        signInFlow: 'popup',
+        signInOptions: [{provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID}]
       };
 
     componentDidMount() {
     }
 
     openSignUp = event => {
-        // this.ui = new firebaseui.auth.AuthUI(firebase.auth());
         this.setState({signInOpen: true});
-        
     }
     
     render() {
         return (
             <div className='landingContent'>
-                <Dialog open={this.state.signInOpen}>
+                <Dialog open={this.state.signInOpen}  onClose={() => this.setState({signInOpen: false})}>
                     <StyledFirebaseAuth uiConfig={this.uiConfig} firebaseAuth={firebase.auth()}/>
                 </Dialog>
                 <div className='clouds'/>

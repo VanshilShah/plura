@@ -1,4 +1,4 @@
-package firestore
+package firebase
 
 import (
 	"context"
@@ -6,32 +6,23 @@ import (
 	"log"
 
 	"cloud.google.com/go/firestore"
-	"github.com/VanshilShah/plura/firestore/models"
+	firebase "firebase.google.com/go"
+	"github.com/VanshilShah/plura/firebase/models"
 	"google.golang.org/api/iterator"
 )
 
-var client *firestore.Client
-
-// Init initializes the firestore client and returns the instance
-func Init() {
-	// Sets your Google Cloud Platform project ID.
-	projectID := "plura-244219"
-
+// InitFirestoreClient initializes the firestore client and returns the instance
+func InitFirestoreClient(app *firebase.App) *firestore.Client {
 	// Get a Firestore client.
-	ctx := context.Background()
-	c, err := firestore.NewClient(ctx, projectID)
+	c, err := app.Firestore(context.Background())
 	if err != nil {
 		log.Fatalf("Failed to create client: %v", err)
 	}
-	client = c
-
-	// Close client when done.
-	// defer client.Close()
-	// return client
+	return c
 }
 
 // GetName returns a name of a user
-func GetName(ctx context.Context) string {
+func GetName(client *firestore.Client, ctx context.Context) string {
 	iter := client.Collection("users").Documents(ctx)
 	for {
 		doc, err := iter.Next()
@@ -48,7 +39,7 @@ func GetName(ctx context.Context) string {
 }
 
 // GetTasks returns a list of tasks
-func GetTasks(ctx context.Context) map[string]*models.Task {
+func GetTasks(client *firestore.Client, ctx context.Context) map[string]*models.Task {
 	tasks := []*models.Task{}
 	iter := client.Collection("tasks").Documents(ctx)
 	for {
@@ -82,7 +73,7 @@ func buildTaskHeirarchy(tasks []*models.Task) map[string]*models.Task {
 }
 
 // SaveTask saves a new task or updates an existing one
-func SaveTask(ctx context.Context, task models.Task) bool {
+func SaveTask(client *firestore.Client, ctx context.Context, task models.Task) bool {
 	fmt.Println(task)
 	var err error
 	task.Children = nil
@@ -98,7 +89,7 @@ func SaveTask(ctx context.Context, task models.Task) bool {
 }
 
 // DeleteTask deletes an existing task as well as all of its children tasks
-func DeleteTask(ctx context.Context, task models.Task) bool {
+func DeleteTask(client *firestore.Client, ctx context.Context, task models.Task) bool {
 	fmt.Println(task)
 	_, err := client.Collection("tasks").Doc(task.ID).Delete(ctx)
 	for _, childTask := range task.Children {
