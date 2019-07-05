@@ -41,12 +41,12 @@ func main() {
 		})
 		api.GET("/name", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{
-				"name": firebase.GetName(firestoreClient, c),
+				"name": firebase.GetName(c, firestoreClient),
 			})
 		})
 		api.GET("/tasks", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{
-				"tasks": firebase.GetTasks(firestoreClient, c),
+				"tasks": firebase.GetTasks(c, firestoreClient),
 			})
 		})
 		api.POST("/tasks", func(c *gin.Context) {
@@ -57,7 +57,7 @@ func main() {
 			if err != nil {
 				fmt.Println(err)
 			}
-			if firebase.SaveTask(firestoreClient, c, task) {
+			if firebase.SaveTask(c, firestoreClient, task) {
 				c.JSON(200, gin.H{})
 			} else {
 				c.JSON(400, gin.H{})
@@ -72,7 +72,7 @@ func main() {
 			if err != nil {
 				fmt.Println(err)
 			}
-			if firebase.DeleteTask(firestoreClient, c, task) {
+			if firebase.DeleteTask(c, firestoreClient, task) {
 				c.JSON(200, gin.H{})
 			} else {
 				c.JSON(400, gin.H{})
@@ -90,9 +90,11 @@ func main() {
 
 func authMiddleware(authClient *auth.Client) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		_, err := firebase.VerifyRequest(authClient, c)
+		token, err := firebase.VerifyRequest(authClient, c)
 		if err != nil {
 			c.JSON(401, gin.H{})
 		}
+		c.Writer.Header().Set("UID", token.UID)
+		c.Next()
 	}
 }

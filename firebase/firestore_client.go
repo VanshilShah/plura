@@ -8,6 +8,7 @@ import (
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
 	"github.com/VanshilShah/plura/firebase/models"
+	"github.com/gin-gonic/gin"
 	"google.golang.org/api/iterator"
 )
 
@@ -22,7 +23,7 @@ func InitFirestoreClient(app *firebase.App) *firestore.Client {
 }
 
 // GetName returns a name of a user
-func GetName(client *firestore.Client, ctx context.Context) string {
+func GetName(ctx *gin.Context, client *firestore.Client) string {
 	iter := client.Collection("users").Documents(ctx)
 	for {
 		doc, err := iter.Next()
@@ -39,9 +40,9 @@ func GetName(client *firestore.Client, ctx context.Context) string {
 }
 
 // GetTasks returns a list of tasks
-func GetTasks(client *firestore.Client, ctx context.Context) map[string]*models.Task {
+func GetTasks(ctx *gin.Context, client *firestore.Client) map[string]*models.Task {
 	tasks := []*models.Task{}
-	iter := client.Collection("tasks").Documents(ctx)
+	iter := getUserRef(ctx, client).Collection("tasks").Documents(ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -73,14 +74,14 @@ func buildTaskHeirarchy(tasks []*models.Task) map[string]*models.Task {
 }
 
 // SaveTask saves a new task or updates an existing one
-func SaveTask(client *firestore.Client, ctx context.Context, task models.Task) bool {
+func SaveTask(ctx *gin.Context, client *firestore.Client, task models.Task) bool {
 	fmt.Println(task)
 	var err error
 	task.Children = nil
 	if task.ID == "" {
-		_, _, err = client.Collection("tasks").Add(ctx, task)
+		_, _, err = getUserRef(ctx, client).Collection("tasks").Add(ctx, task)
 	} else {
-		_, err = client.Collection("tasks").Doc(task.ID).Set(ctx, task)
+		_, err = getUserRef(ctx, client).Collection("tasks").Doc(task.ID).Set(ctx, task)
 	}
 	if err != nil {
 		fmt.Println(err)
@@ -89,15 +90,21 @@ func SaveTask(client *firestore.Client, ctx context.Context, task models.Task) b
 }
 
 // DeleteTask deletes an existing task as well as all of its children tasks
-func DeleteTask(client *firestore.Client, ctx context.Context, task models.Task) bool {
+func DeleteTask(ctx *gin.Context, client *firestore.Client, task models.Task) bool {
 	fmt.Println(task)
-	_, err := client.Collection("tasks").Doc(task.ID).Delete(ctx)
+	_, err := getUserRef(ctx, client).Collection("tasks").Doc(task.ID).Delete(ctx)
 	for _, childTask := range task.Children {
-		_, err = client.Collection("tasks").Doc(childTask.ID).Delete(ctx)
+		_, err = getUserRef(ctx, client).Collection("tasks").Doc(childTask.ID).Delete(ctx)
 	}
 	if err != nil {
 		// Handle any errors in an appropriate way, such as returning them.
 		fmt.Println(err)
 	}
 	return err == nil
+}
+
+func getUserRef(ctx *gin.Context, client *firestore.Client) *firestore.DocumentRef {
+	UID := ctx.Writer.Header().Get("UID")
+	fmt.Println(UID)
+	return client.Collection("users").Doc(UID)
 }
