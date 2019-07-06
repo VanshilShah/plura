@@ -83,5 +83,6 @@ gin-bin
 
 # Ignore webpack bundles and generated react components (should be built fresh).
 public/*.bundle.js
-public/react-components/
+public/components/
+public/controllers/
 public/stylesheet.css

@@ -6,6 +6,7 @@ import firebase from 'firebase/app';
 import { withSnackbar } from 'notistack';
 import PropTypes from 'prop-types';
 import React from 'react';
+import api from '../controllers/api';
 import CreateTask from './create_task';
 import TaskCard from './task_card';
 import TaskList from './task_list';
@@ -22,9 +23,11 @@ class Dashboard extends React.Component {
         tasks: undefined,
         createActive: false,
         showDeleteTaskDialog: false,
+        activeTaskKey: '',
         deletingTask: ''
       }
       this.createTaskRef = React.createRef();
+      this.activeTaskRef = React.createRef();
     }
 
 
@@ -47,15 +50,7 @@ class Dashboard extends React.Component {
 
     getName = async () => {
       try {
-        const idToken = await firebase.auth().currentUser.getIdToken();
-        const res = await fetch('/api/name', {
-          method: 'GET',
-          withCredentials: true,
-          credentials: 'include',
-          headers: {
-            'Authorization': idToken
-          }
-        });
+        const res = await api.getName();
         const json = await res.json();
         console.log(json)
         this.setState({name: json.name});
@@ -67,15 +62,7 @@ class Dashboard extends React.Component {
 
     getTasks = async (user) => {
       try {
-        const idToken = await firebase.auth().currentUser.getIdToken();
-        const res = await fetch('/api/tasks', {
-          method: 'GET',
-          withCredentials: true,
-          credentials: 'include',
-          headers: {
-            'Authorization': idToken
-          }
-        });
+        const res = await api.getTasks();
         const json = await res.json();
         console.log(json.tasks)
         this.setState({tasks: json.tasks});
@@ -87,16 +74,7 @@ class Dashboard extends React.Component {
 
     saveTask = async(task) => {
       try{
-        const idToken = await firebase.auth().currentUser.getIdToken();
-        const res = await fetch('/api/tasks', {
-          method: 'POST',
-          headers: {
-            'Authorization': idToken,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(task)
-        });
+        const res = await api.saveTask(task);
         if (res.status == 200){
           this.setState({createActive: false});
           this.props.enqueueSnackbar('Task Saved', {variant: 'success'});
@@ -111,17 +89,8 @@ class Dashboard extends React.Component {
 
     deleteTask = async() => {
       try{
-        const idToken = await firebase.auth().currentUser.getIdToken();
         const task = this.state.tasks[this.state.deletingTask];
-        const res = await fetch('/api/tasks', {
-          method: 'DELETE',
-          headers: {
-            'Authorization': idToken,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(task)
-        });
+        const res = await api.deleteTask(task);
         if (res.status == 200){
           this.cancelDeleteTask();
           this.setState({createActive: false});
@@ -146,11 +115,12 @@ class Dashboard extends React.Component {
     
     render() {
         const createTaskComponent = this.createTaskRef.current
+        const { createActive, tasks, activeTaskKey} = this.state;
         return (
-            <div className='content'>
-                <TaskList tasks={this.state.tasks}/>
+            <div className='content flex'>
                 {this.renderDeleteDialog()}
-                {/* {this.state.tasks != undefined && Object.keys(this.state.tasks).map(this.renderTask)} */}
+                <TaskList tasks={tasks} activeTask={activeTaskKey}/>
+                {activeTaskKey != '' && <TaskCard ref={this.activeTaskRef} task={tasks[activeTaskKey]}/>}
                 {!this.state.createActive 
                   && <Fab 
                     color="primary" 
@@ -163,7 +133,7 @@ class Dashboard extends React.Component {
                 </Fab>}
               <CreateTask
                 ref={this.createTaskRef}
-                active={this.state.createActive}
+                active={createActive}
                 disactivate={() => this.setState({createActive: false})}
                 deleteTask={this.openDeleteTask}
                 save={this.saveTask}/>

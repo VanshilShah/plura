@@ -15,7 +15,7 @@ module.exports = env => {
   ],
   mode: 'development',
   entry: {
-    app:  './public/react-components/app.js'
+    app:  './public/components/app.js'
   },
   output: {
     filename: '[name].bundle.js',

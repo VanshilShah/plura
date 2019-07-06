@@ -6,8 +6,8 @@ import (
 	"os"
 
 	"firebase.google.com/go/auth"
-	"github.com/VanshilShah/plura/firebase"
-	"github.com/VanshilShah/plura/firebase/models"
+	"github.com/VanshilShah/plura/src_go/firebase"
+	"github.com/VanshilShah/plura/src_go/firebase/models"
 	"github.com/gin-gonic/contrib/static"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"

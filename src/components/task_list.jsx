@@ -7,7 +7,6 @@ export default class TaskList extends React.Component {
   }
 
   render() {
-      // const {Name, Deadline, Duration, ID, Description, Parent, Children, Completed} = this.props.task;
       return (<Card className='taskList'>
           <div className='taskListHeader'>All Tasks</div>
           <div className='taskListContent'>

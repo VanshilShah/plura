@@ -6,15 +6,15 @@
   "scripts": {
     "save-env": "env > .env",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build-css": "node-sass --include-path scss public/stylesheets/stylesheet.scss public/stylesheet.css",
+    "build-css": "node-sass --include-path scss src/stylesheets/stylesheet.scss public/stylesheet.css",
     "watch-css": "nodemon -e scss -x npm run build-css",
     "build-webpack-release": "npx webpack --config webpack.config.js --mode=production",
     "watch-webpack": "npx webpack --config webpack.config.js --watch",
-    "build-jsx-release": "npx babel components --out-dir public/react-components --presets react-app/prod",
-    "watch-jsx": "npx babel --watch components --out-dir public/react-components --presets react-app/dev",
-    "build-start": "npm run watch-css & npm run watch-jsx & npm run watch-webpack & gin run main.go",
+    "build-babel-release": "npx babel src --out-dir public --presets react-app/prod",
+    "watch-babel": "npx babel --watch src --out-dir public --presets react-app/dev",
+    "build-start": "npm run watch-css & npm run watch-babel & npm run watch-webpack & gin run main.go",
     "start": "go run main.go",
-    "build-release": "npm run save-env && npm install && npm run build-css && npm run build-jsx-release && npm run build-webpack-release"
+    "build-release": "npm run save-env && npm install && npm run build-css && npm run build-babel-release && npm run build-webpack-release"
   },
   "repository": {
     "type": "git",

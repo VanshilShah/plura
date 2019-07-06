@@ -215,6 +215,13 @@
   button.none{
     @include none();
   }
+
+  @mixin flex(){
+    display: flex;
+  }
+  .flex {
+    @include flex();
+  }
   
   @mixin float($float){
    float: $float; 

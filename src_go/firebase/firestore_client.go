@@ -7,7 +7,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	firebase "firebase.google.com/go"
-	"github.com/VanshilShah/plura/firebase/models"
+	"github.com/VanshilShah/plura/src_go/firebase/models"
 	"github.com/gin-gonic/gin"
 	"google.golang.org/api/iterator"
 )
