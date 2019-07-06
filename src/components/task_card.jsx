@@ -1,4 +1,4 @@
-import { Button, Card, Checkbox, IconButton } from '@material-ui/core';
+import { Button, Card, IconButton } from '@material-ui/core';
 import { Edit } from '@material-ui/icons';
 import moment from 'moment';
 import React from 'react';
@@ -13,7 +13,6 @@ export default class TaskCard extends React.Component {
         return (<Card className='taskCard'>
             <div className='taskCardHeader'>
                 <p className='none f-left'>{Name}</p>
-                <p className='none f-left'>{moment(Deadline).format("ddd, MMM Do, hA")}</p>
                 <p className='none f-left'>{moment.duration(Duration, 'm').humanize()}</p>
                 <IconButton 
                   color='inherit'
@@ -25,6 +24,7 @@ export default class TaskCard extends React.Component {
                 <div className='clear'></div>
             </div>
             <div className='taskCardContent'>
+                {moment(Deadline).format("ddd, MMM Do, hA")}
                 <div className='dividerRight'>
                 <p className='none margin-v-m'>{Description}</p>
                 </div>
@@ -33,12 +33,12 @@ export default class TaskCard extends React.Component {
                   {Children != undefined && Children.map(this.renderChildTask)}
                 </div>
             </div>
-            <Checkbox
+            {/* <Checkbox
                 className='completedCheckbox'
                 checked={Completed}
                 onChange={event => {this.setState({'Completed': !Completed})}}
                 value="completed"
-                inputProps={{'aria-label': 'completed checkbox'}}/>
+                inputProps={{'aria-label': 'completed checkbox'}}/> */}
         </Card>);
             
     }

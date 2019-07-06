@@ -16,17 +16,14 @@
   
   .taskCardContent{
     @include padding($padding-s);
-    display: grid;
-    grid-template-columns: 60% 40%;
-    grid-auto-rows: 2;
   }
   
   .dividerRight{
-    border-right: $accent 1px solid;
+    // border-right: $accent 1px solid;
   }
   
   .childTaskContainer{
-    grid-column-start: 2;
+    
   }
   
   Button.childTask{

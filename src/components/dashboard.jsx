@@ -93,7 +93,7 @@ class Dashboard extends React.Component {
         const res = await api.deleteTask(task);
         if (res.status == 200){
           this.cancelDeleteTask();
-          this.setState({createActive: false});
+          this.setState({createActive: false, activeTask:''});
           this.props.enqueueSnackbar('Task Deleted', {variant: 'success'});
           this.getTasks()
         }
@@ -119,8 +119,8 @@ class Dashboard extends React.Component {
         return (
             <div className='content flex'>
                 {this.renderDeleteDialog()}
-                <TaskList tasks={tasks} activeTask={activeTaskKey}/>
-                {activeTaskKey != '' && <TaskCard ref={this.activeTaskRef} task={tasks[activeTaskKey]}/>}
+                <TaskList tasks={tasks} activeTask={activeTaskKey} setActiveTask={this.setActiveTask}/>
+                {activeTaskKey != '' && <TaskCard ref={this.activeTaskRef} task={tasks[activeTaskKey]} editTask={this.editTask}/>}
                 {!this.state.createActive 
                   && <Fab 
                     color="primary" 
@@ -166,6 +166,9 @@ class Dashboard extends React.Component {
       );
     }
 
+    setActiveTask = key => {
+      this.setState({activeTaskKey: key});
+    }
     
     createTask = task => {
       const createTaskComponent = this.createTaskRef.current

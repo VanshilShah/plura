@@ -1,6 +1,7 @@
 div.taskList {
     @include fill-v();
     width: 400px;
+    border-radius: 0px;
 }
 
 .taskListHeader{

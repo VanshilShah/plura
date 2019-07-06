@@ -21,7 +21,9 @@ export default class TaskList extends React.Component {
     const child = this.props.tasks[childSummary.ID];
     const isProject = child.TaskType == 'project';
     return <div key={child.ID} className='taskListItem'>
-      <Button className='taskListItemButton'>
+      <Button 
+        className='taskListItemButton'
+        onClick={event => this.props.setActiveTask(child.ID)}>
         {child.Name}
       </Button>
       {this.renderChildren(child)}
