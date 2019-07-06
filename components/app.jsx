@@ -19,7 +19,7 @@ class App extends React.Component {
     constructor(props) {
       super(props);
       this.state = {
-        isSignedIn: false
+        isSignedIn: true
       }
       var firebaseConfig = {
         apiKey: process.env.FIREBASE_API_KEY,
@@ -77,7 +77,7 @@ class App extends React.Component {
         <MuiThemeProvider theme={theme}>
         <SnackbarProvider maxSnack={3}>
           <Route exact path="/" component={Landing}>
-            {this.state.isSignedIn && <Redirect to="/dashboard"/>}
+            {(this.state.isSignedIn && firebase.auth().currentUser) && <Redirect to="/dashboard"/>}
           </Route>
           <Route path="/dashboard"  render={(props) => <Dashboard {...props} isSignedIn={this.state.isSignedIn}/>}>
             {!this.state.isSignedIn && <Redirect to="/"/>}

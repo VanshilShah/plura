@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import CreateTask from './create_task';
 import TaskCard from './task_card';
+import TaskList from './task_list';
 
 class Dashboard extends React.Component {
     static contextTypes = {
@@ -26,16 +27,22 @@ class Dashboard extends React.Component {
       this.createTaskRef = React.createRef();
     }
 
-    componentDidMount() {
-      if (this.props.isSignedIn) {
-        var user = firebase.auth().currentUser;
 
-        if (user != null) {
-          this.getName();
-          this.getTasks();
-        }
-       
-      }
+    componentDidMount() {
+      this.unregisterAuthObserver = firebase.auth().onAuthStateChanged(
+          (user) => {
+            var user = firebase.auth().currentUser;
+            if (user != null) {
+              this.getName();
+              this.getTasks();
+            }
+          }
+      );
+      
+    }
+
+    componentWillUnmount() {
+      this.unregisterAuthObserver();
     }
 
     getName = async () => {
@@ -141,8 +148,9 @@ class Dashboard extends React.Component {
         const createTaskComponent = this.createTaskRef.current
         return (
             <div className='content'>
+                <TaskList tasks={this.state.tasks}/>
                 {this.renderDeleteDialog()}
-                {this.state.tasks != undefined && Object.keys(this.state.tasks).map(this.renderTask)}
+                {/* {this.state.tasks != undefined && Object.keys(this.state.tasks).map(this.renderTask)} */}
                 {!this.state.createActive 
                   && <Fab 
                     color="primary" 

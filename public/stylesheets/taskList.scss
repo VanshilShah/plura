@@ -1,0 +1,31 @@
+div.taskList {
+    @include fill-v();
+    width: 400px;
+}
+
+.taskListHeader{
+    @include none();
+    @include accent-bg();
+    @include text-on-primary();
+    @include padding($padding-m);
+    display: flex;
+    justify-content: space-between;
+  }
+  
+.taskListContent{
+    // @include padding($padding-m);
+    padding: $padding-m 0px $padding-m -$margin-s;
+}
+
+
+div.taskListItem {
+    margin-left: $margin-s;
+}
+
+button.taskListItemButton{
+    text-transform: none;
+    @include no-decor();
+    width: -webkit-fill-available;
+    display: block;
+    text-align: left;
+}

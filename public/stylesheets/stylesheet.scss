@@ -18,12 +18,14 @@ $app-bar-height: 48px;
 @import 'mixins.scss';
 @import 'taskCard.scss';
 @import 'createTask.scss';
+@import 'taskList.scss';
+
 
 //~~~~~~~~COMPONENTS~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 div.appBar{
   height: $app-bar-height;
-  // padding: $padding-s $padding-m $padding-s $padding-m;
+  min-height: $app-bar-height;
   color: $text-on-primary;
 }
 .appBarText{
