@@ -42,7 +42,7 @@ func GetName(ctx *gin.Context, client *firestore.Client) string {
 // GetTasks returns a list of tasks
 func GetTasks(ctx *gin.Context, client *firestore.Client) map[string]*models.Task {
 	tasks := []*models.Task{}
-	iter := getUserRef(ctx, client).Collection("tasks").Documents(ctx)
+	iter := getUserTasksRef(ctx, client).Documents(ctx)
 	for {
 		doc, err := iter.Next()
 		if err == iterator.Done {
@@ -78,10 +78,12 @@ func SaveTask(ctx *gin.Context, client *firestore.Client, task models.Task) bool
 	fmt.Println(task)
 	var err error
 	task.Children = nil
+	task.Owner = getUserRef(ctx, client)
+	task.Parent = getUserTasksRef(ctx, client).Doc(task.Parent.ID)
 	if task.ID == "" {
-		_, _, err = getUserRef(ctx, client).Collection("tasks").Add(ctx, task)
+		_, _, err = getUserTasksRef(ctx, client).Add(ctx, task)
 	} else {
-		_, err = getUserRef(ctx, client).Collection("tasks").Doc(task.ID).Set(ctx, task)
+		_, err = getUserTasksRef(ctx, client).Doc(task.ID).Set(ctx, task)
 	}
 	if err != nil {
 		fmt.Println(err)
@@ -92,9 +94,9 @@ func SaveTask(ctx *gin.Context, client *firestore.Client, task models.Task) bool
 // DeleteTask deletes an existing task as well as all of its children tasks
 func DeleteTask(ctx *gin.Context, client *firestore.Client, task models.Task) bool {
 	fmt.Println(task)
-	_, err := getUserRef(ctx, client).Collection("tasks").Doc(task.ID).Delete(ctx)
+	_, err := getUserTasksRef(ctx, client).Doc(task.ID).Delete(ctx)
 	for _, childTask := range task.Children {
-		_, err = getUserRef(ctx, client).Collection("tasks").Doc(childTask.ID).Delete(ctx)
+		_, err = getUserTasksRef(ctx, client).Doc(childTask.ID).Delete(ctx)
 	}
 	if err != nil {
 		// Handle any errors in an appropriate way, such as returning them.
@@ -107,4 +109,8 @@ func getUserRef(ctx *gin.Context, client *firestore.Client) *firestore.DocumentR
 	UID := ctx.Writer.Header().Get("UID")
 	fmt.Println(UID)
 	return client.Collection("users").Doc(UID)
+}
+
+func getUserTasksRef(ctx *gin.Context, client *firestore.Client) *firestore.CollectionRef {
+	return getUserRef(ctx, client).Collection("tasks")
 }

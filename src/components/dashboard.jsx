@@ -93,7 +93,7 @@ class Dashboard extends React.Component {
         const res = await api.deleteTask(task);
         if (res.status == 200){
           this.cancelDeleteTask();
-          this.setState({createActive: false, activeTask:''});
+          this.setState({createActive: false, activeTaskKey:''});
           this.props.enqueueSnackbar('Task Deleted', {variant: 'success'});
           this.getTasks()
         }

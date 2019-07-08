@@ -33,6 +33,9 @@ export default class CreateTask extends React.Component {
           MonthDay: 1,
           YearDay: moment()
         },
+        Parent: {
+          ID: 'root'
+        },
         Duration: 1,
         ChunkSize: 1,
       } 
