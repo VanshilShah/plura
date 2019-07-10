@@ -1,5 +1,5 @@
 import { Button, Card, IconButton } from '@material-ui/core';
-import { Edit } from '@material-ui/icons';
+import { Add, Edit, SubdirectoryArrowRight } from '@material-ui/icons';
 import moment from 'moment';
 import React from 'react';
 
@@ -10,6 +10,7 @@ export default class TaskCard extends React.Component {
 
     render() {
         const {Name, Recurrance, Duration, ID, Description, Parent, Children, Completed} = this.props.task;
+        const isChild = Parent.ID != 'root';
         return (<Card className='taskCard'>
             <div className='taskCardHeader'>
                 <p className='none f-left'>{Name}</p>
@@ -24,20 +25,40 @@ export default class TaskCard extends React.Component {
             </div>
             <div className='clear'></div>
             <div className='taskCardContent'>
+                <Button 
+                  color='secondary'
+                  className='taskCardParentButton'
+                  variant='outlined'
+                  disabled={!isChild}
+                  aria-label='Go to parent'
+                  onClick={() => this.props.setActive(Parent.ID)}>
+                  <SubdirectoryArrowRight />
+                   {isChild ? Parent.Name : 'root'}
+                </Button>
                 <div className='taskCardRecurrance'>
                   <div className='taskCardRecurranceType'>
                     {Recurrance.Type}
                   </div>
+                  {Recurrance.Type != 'inherit' && 
                   <div className='taskCardDeadline'>
                     {this.humanizeDeadline()}  
-                  </div>
+                  </div>}
                 </div>
                 <div className='taskCardDescription'>
                 <p className='none margin-v-m'>{Description}</p>
                 </div>
-                <div>{Parent ? Parent.ID : ''}</div>
+                <Button 
+                  color='primary'
+                  className='taskCardParentButton'
+                  variant='contained'
+                  aria-label='Create child'
+                  onClick={this.props.createChild(ID)}>
+                  <Add/>
+                    Add child
+                </Button>
+
                 <div className='childTaskContainer'>
-                  {Children != undefined && Children.map(this.renderChildTask)}
+                  {/* {Children != undefined && Children.map(this.renderChildTask)} */}
                 </div>
             </div>
             {/* <Checkbox

@@ -54,6 +54,11 @@ Button.childTask{
   display: block;
 }
 
+button.taskCardParentButton{
+  width: fit-content;
+  text-transform: none;
+}
+
 .completedCheckbox{
   @include float(right);
 }

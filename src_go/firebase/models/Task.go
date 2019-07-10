@@ -29,6 +29,8 @@ const (
 	Monthly RecurranceType = "monthly"
 	// Yearly is a RecurranceType for yearly repeating tasks
 	Yearly RecurranceType = "yearly"
+	// Inherit is a RecurranceType for child tasks
+	Inherit RecurranceType = "inherit"
 )
 
 // ChildTask represents a summary of a child task

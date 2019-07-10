@@ -34,7 +34,8 @@ export default class CreateTask extends React.Component {
           YearDay: moment()
         },
         Parent: {
-          ID: 'root'
+          ID: 'root',
+          Type: 'once'
         },
         Duration: 1,
         ChunkSize: 1,
@@ -63,20 +64,11 @@ export default class CreateTask extends React.Component {
     
     render() {
 
-      const {Name, Description, TaskType, Duration, ChunkSize, Recurrance} = this.state;
+      const {Name, Description, TaskType, Duration, ChunkSize, Recurrance, Parent} = this.state;
       const {Weekdays} = Recurrance;
+      const {recurranceTypes, showWeekdayPicker, showMonthDayPicker, showDatePicker, weekdays, datePickerProps} = this.getRecurranceProps();
       const classes = 'createTask' + (this.props.active? ' createTaskActive':' createTaskSlideOut');
-      const recurranceTypes = ['once','weekly', 'monthly', 'yearly'];
-      const weekdays = ['S', 'M', 'T', 'W', 'TH', 'F', 'SA'];
-      const showWeekdayPicker = Recurrance.Type == 'weekly';
-      const showMonthDayPicker = Recurrance.Type == 'monthly';
-      const showDatePicker = Recurrance.Type == 'once' || Recurrance.Type == 'yearly';
       const tasktypes = ['project', 'roadblock'];
-
-      const datePickerProps = {
-        'once': {label: "Deadline", disablePast: true, value: Recurrance.Deadline},
-        'yearly': {label: "Day of year", minDate: moment().startOf('year') , maxDate: moment().endOf('year'), value: Recurrance.YearDay}
-      }
       return (
       <MuiPickersUtilsProvider utils={MomentUtils}>
       <Card className={classes}>
@@ -150,7 +142,7 @@ export default class CreateTask extends React.Component {
           />}
           {showDatePicker  
             && <DatePicker
-              {...datePickerProps[Recurrance.Type]}
+              {...datePickerProps}
               className='createTaskRecurranceDetails'
               id="deadline"
               allowKeyboardControl
@@ -196,6 +188,60 @@ export default class CreateTask extends React.Component {
           </Button>
         </div>
       </Card></MuiPickersUtilsProvider>);
-            
+    }
+
+    getRecurranceProps = () => {
+      const {Recurrance, Parent} = this.state;
+      const ret = {
+        showWeekdayPicker: false,
+        showMonthDayPicker: false,
+        showDatePicker: false,
+        recurranceTypes: ['once','weekly', 'monthly', 'yearly'],
+        weekdays: ['S', 'M', 'T', 'W', 'TH', 'F', 'SA'],
+        datePickerProps: {},
+      }
+      switch (Recurrance.Type){
+        case 'once':
+          ret.showDatePicker = true;
+          ret.datePickerProps = {
+            label: "Deadline",
+            disablePast: true,
+            value: Recurrance.Deadline
+          }
+          break;
+        case 'weekly':
+          ret.showWeekdayPicker = true;
+          break;
+        case 'monthly':
+          ret.showMonthDayPicker = true;
+          break;
+        case 'yearly':
+          ret.showDatePicker = true;
+          ret.datePickerProps = {
+            label: "Day of year",
+            minDate: moment().startOf('year'),
+            maxDate: moment().endOf('year'),
+            value: Recurrance.YearDay
+          }
+          break;
+      }
+
+      if (Parent.ID != 'root') {
+        switch (Parent.Recurrance.Type){
+          case 'once':
+            ret.datePickerProps.maxDate = moment(Parent.Recurrance.Deadline);
+            break;
+          case 'weekly':
+            ret.recurranceTypes = ['inherit'];
+            break;
+          case 'monthly':
+            ret.recurranceTypes = ['inherit'];
+            break;
+          case 'yearly':
+            ret.recurranceTypes = ['inherit'];
+            break;
+        }
+      }
+      return ret;
     }
   }

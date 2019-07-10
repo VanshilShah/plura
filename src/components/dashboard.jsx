@@ -64,8 +64,15 @@ class Dashboard extends React.Component {
       try {
         const res = await api.getTasks();
         const json = await res.json();
-        console.log(json.tasks)
-        this.setState({tasks: json.tasks});
+        const tasks = json.tasks;
+        Object.keys(tasks).map(key => {
+          let task = tasks[key]
+          if (task.Parent){
+            task.Parent = tasks[task.Parent.ID]
+          }
+        })
+        console.log(tasks);
+        this.setState({tasks: tasks});
       } catch (err){
         this.props.enqueueSnackbar('Could not load tasks', {variant: 'warning'});
         console.log(err);
@@ -120,7 +127,13 @@ class Dashboard extends React.Component {
             <div className='content flex'>
                 {this.renderDeleteDialog()}
                 <TaskList tasks={tasks} activeTask={activeTaskKey} setActiveTask={this.setActiveTask}/>
-                {activeTaskKey != '' && <TaskCard ref={this.activeTaskRef} task={tasks[activeTaskKey]} editTask={this.editTask}/>}
+                {activeTaskKey != '' && 
+                  <TaskCard 
+                    ref={this.activeTaskRef}
+                    task={tasks[activeTaskKey]}
+                    editTask={this.editTask}
+                    setActive={this.setActiveTask}
+                    createChild={this.createChild}/>}
                 {!this.state.createActive 
                   && <Fab 
                     color="primary" 
@@ -171,7 +184,7 @@ class Dashboard extends React.Component {
     }
     
     createTask = task => {
-      if(this.state.createActive && this.createTaskRef.current.state){ 
+      if(this.state.createActive && this.createTaskRef.current.state.ID == task.ID){ 
         this.setState({createActive:false})
         return
       }
@@ -182,6 +195,12 @@ class Dashboard extends React.Component {
 
     editTask = key => event => {
       const task = this.state.tasks[key];
+      this.createTask(task);
+    }
+
+    createChild = key => event => {
+      const task = this.createTaskRef.current.startingState();
+      task.Parent = this.state.tasks[key];
       this.createTask(task);
     }
 
