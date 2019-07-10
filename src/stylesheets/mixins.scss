@@ -36,7 +36,7 @@
   }
   
   @mixin grey {
-    color: #333;
+    color: #ddd;
   }
   .grey{
     @include grey();
@@ -46,7 +46,7 @@
   }
   
   @mixin grey-bg {
-    background: #333;
+    background: #ddd;
   }
   .grey-bg{
     @include grey-bg();

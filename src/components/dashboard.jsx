@@ -171,6 +171,10 @@ class Dashboard extends React.Component {
     }
     
     createTask = task => {
+      if(this.state.createActive && this.createTaskRef.current.state){ 
+        this.setState({createActive:false})
+        return
+      }
       const createTaskComponent = this.createTaskRef.current
       this.setState({createActive: true})
       createTaskComponent.setState({...task});

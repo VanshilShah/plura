@@ -1,5 +1,5 @@
 import MomentUtils from '@date-io/moment';
-import { Button, Checkbox, FormControlLabel, FormLabel, IconButton, MenuItem, Paper, TextField } from '@material-ui/core';
+import { Button, Card, Checkbox, FormControlLabel, FormLabel, IconButton, MenuItem, TextField } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import moment from 'moment';
@@ -79,7 +79,7 @@ export default class CreateTask extends React.Component {
       }
       return (
       <MuiPickersUtilsProvider utils={MomentUtils}>
-      <Paper className={classes}>
+      <Card className={classes}>
         <div className='createTaskHeader'>
           <TextField
             id="taskName"
@@ -94,8 +94,8 @@ export default class CreateTask extends React.Component {
             onClick={this.props.deleteTask(this.state.ID)}>
             <Delete />
           </IconButton>}
-          <div className='clear'/>
         </div>
+        <div className='clear'/>
         <div className='createTaskContent'>
           <TextField
             id="tasktype"
@@ -195,7 +195,7 @@ export default class CreateTask extends React.Component {
               Save
           </Button>
         </div>
-      </Paper></MuiPickersUtilsProvider>);
+      </Card></MuiPickersUtilsProvider>);
             
     }
   }

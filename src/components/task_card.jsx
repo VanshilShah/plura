@@ -9,11 +9,11 @@ export default class TaskCard extends React.Component {
     }
 
     render() {
-        const {Name, Deadline, Duration, ID, Description, Parent, Children, Completed} = this.props.task;
+        const {Name, Recurrance, Duration, ID, Description, Parent, Children, Completed} = this.props.task;
         return (<Card className='taskCard'>
             <div className='taskCardHeader'>
                 <p className='none f-left'>{Name}</p>
-                <p className='none f-left'>{moment.duration(Duration, 'm').humanize()}</p>
+                {/* <p className='none f-left'>{moment.duration(Duration, 'h').humanize()}</p> */}
                 <IconButton 
                   color='inherit'
                   className='none f-right'
@@ -21,11 +21,18 @@ export default class TaskCard extends React.Component {
                   onClick={this.props.editTask(ID)}>
                   <Edit />
                 </IconButton>
-                <div className='clear'></div>
             </div>
+            <div className='clear'></div>
             <div className='taskCardContent'>
-                {moment(Deadline).format("ddd, MMM Do, hA")}
-                <div className='dividerRight'>
+                <div className='taskCardRecurrance'>
+                  <div className='taskCardRecurranceType'>
+                    {Recurrance.Type}
+                  </div>
+                  <div className='taskCardDeadline'>
+                    {this.humanizeDeadline()}  
+                  </div>
+                </div>
+                <div className='taskCardDescription'>
                 <p className='none margin-v-m'>{Description}</p>
                 </div>
                 <div>{Parent ? Parent.ID : ''}</div>
@@ -43,6 +50,24 @@ export default class TaskCard extends React.Component {
             
     }
     
+    humanizeDeadline = () => {
+      const recurrance = this.props.task.Recurrance;
+
+      switch (recurrance.Type) {
+        case 'once':
+          return moment(recurrance.Deadline).format("ddd, MMM Do");
+        case 'weekly':
+          return 'Every ' + Object.keys(recurrance.Weekdays).filter(key => recurrance.Weekdays[key]).join(', ');
+        case 'monthly':
+            return 'Every ' + moment().startOf('year').add(recurrance.MonthDay, 'd').format('Do') + ' of the month';
+        case 'yearly':
+            return 'Every ' + moment(recurrance.YearDay).format('MMMM Do');
+        default:
+          return '';
+      }
+      {moment(Deadline).format("ddd, MMM Do, hA")}
+    }
+
     renderChildTask = childTask => {
       return (<Button 
         className='childTask'

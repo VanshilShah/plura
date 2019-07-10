@@ -5,34 +5,55 @@
     border-radius: 0px;
   }
   
-  .taskCardHeader{
-    @include none();
-    @include accent-bg();
-    @include text-on-primary();
-    @include padding($padding-s);
-    display: flex;
-    justify-content: space-between;
-  }
+.taskCardHeader{
+  @include none();
+  @include accent-bg();
+  @include text-on-primary();
+  @include padding($padding-s);
+  display: flex;
+  justify-content: space-between;
+}
+
+.taskCardContent{
+  @include padding($padding-s);
+  display: grid;
+  grid-gap: $margin-s;
+}
+
+.taskCardDeadline{
+  @include padding($padding-s);
+  @include accent-bg();
+  @include text-on-primary();
+  width: fit-content;
+}
+
+.taskCardRecurrance{
+  display: flex;
+  justify-content: space-between;
+}  
+
+.taskCardRecurranceType{
+  @include padding($padding-s);
+  @include accent-bg();
+  @include text-on-primary();
+}  
+
+.taskCardDescription{
+  @include padding($padding-s);
+  @include grey-bg();
+}
   
-  .taskCardContent{
-    @include padding($padding-s);
-  }
+.childTaskContainer{
   
-  .dividerRight{
-    // border-right: $accent 1px solid;
-  }
-  
-  .childTaskContainer{
-    
-  }
-  
-  Button.childTask{
-    // @include none();
-    @include margin-v($margin-s);
-    @include no-decor();
-    display: block;
-  }
-  
-  .completedCheckbox{
-    @include float(right);
-  }
+}
+
+Button.childTask{
+  // @include none();
+  @include margin-v($margin-s);
+  @include no-decor();
+  display: block;
+}
+
+.completedCheckbox{
+  @include float(right);
+}
