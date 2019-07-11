@@ -199,8 +199,7 @@ class Dashboard extends React.Component {
     }
 
     createChild = key => event => {
-      const task = this.createTaskRef.current.startingState();
-      task.Parent = this.state.tasks[key];
+      const task = this.createTaskRef.current.startingState(this.state.tasks[key]);
       this.createTask(task);
     }
 

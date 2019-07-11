@@ -25,18 +25,8 @@
   @include accent-bg();
   @include text-on-primary();
   width: fit-content;
+  
 }
-
-.taskCardRecurrance{
-  display: flex;
-  justify-content: space-between;
-}  
-
-.taskCardRecurranceType{
-  @include padding($padding-s);
-  @include accent-bg();
-  @include text-on-primary();
-}  
 
 .taskCardDescription{
   @include padding($padding-s);

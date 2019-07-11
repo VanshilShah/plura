@@ -61,13 +61,14 @@ func buildTaskHeirarchy(tasks []*models.Task) map[string]*models.Task {
 	taskMap := make(map[string]*models.Task)
 	// populate map
 	for _, task := range tasks {
+		task.Children = []models.ChildTask{}
 		taskMap[task.ID] = task
 	}
 
 	// update children fields
 	for _, task := range tasks {
 		if task.Parent != nil {
-			taskMap[task.Parent.ID].Children = append(taskMap[task.Parent.ID].Children, models.ChildTask{task.ID, task.Name, task.TaskType, task.Completed})
+			taskMap[task.Parent.ID].Children = append(taskMap[task.Parent.ID].Children, models.ChildTask{task.ID, task.Name, task.Duration, task.TaskType, task.Completed})
 		}
 	}
 	return taskMap

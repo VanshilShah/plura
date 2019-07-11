@@ -12,14 +12,24 @@ export default class CreateTask extends React.Component {
       this.state = this.startingState();
     }
 
-    startingState = () => {
+    startingState = (parent=undefined) => {
+      let shouldInheritDefault = false;
+      if (!parent) {
+        parent =  {
+          ID: 'root',
+          Type: 'once',
+          Children: [],
+        }
+      } else {
+        shouldInheritDefault = parent.ID != 'root' && parent.Recurrance.Type != 'once';
+      }
       return {
         ID: undefined,
         Name: '',
         Description: '',
         TaskType: 'project',
         Recurrance: {
-          Type: 'once',
+          Type: shouldInheritDefault ? 'inherit' : 'once',
           Deadline: moment(),
           Weekdays: {
             S: false,
@@ -33,10 +43,7 @@ export default class CreateTask extends React.Component {
           MonthDay: 1,
           YearDay: moment()
         },
-        Parent: {
-          ID: 'root',
-          Type: 'once'
-        },
+        Parent: parent,
         Duration: 1,
         ChunkSize: 1,
       } 
@@ -63,8 +70,8 @@ export default class CreateTask extends React.Component {
   
     
     render() {
-
       const {Name, Description, TaskType, Duration, ChunkSize, Recurrance, Parent} = this.state;
+      const isChild = Parent.ID != 'root';
       const {Weekdays} = Recurrance;
       const {recurranceTypes, showWeekdayPicker, showMonthDayPicker, showDatePicker, weekdays, datePickerProps} = this.getRecurranceProps();
       const classes = 'createTask' + (this.props.active? ' createTaskActive':' createTaskSlideOut');
@@ -153,7 +160,9 @@ export default class CreateTask extends React.Component {
             id="duration"
             label="Duration (hours)"
             value={Duration}
+            inputProps={{ min: "0", max: this.calculateMaxDuration(), step: "1" }}
             onChange={this.handleTextChange('Duration', true)}
+            helperText={isChild ? 'Must be no more than ' + moment.duration(this.calculateMaxDuration(), 'h').humanize() : 'Must be greater than chunk size'}
             type="number"
           />
           <TextField
@@ -162,6 +171,7 @@ export default class CreateTask extends React.Component {
             value={ChunkSize}
             helperText="How long each chunk should be scheduled"
             onChange={this.handleTextChange('ChunkSize', true)}
+            inputProps={{ min: "0", max: Duration, step: "1" }}
             type="number"
           />
           <TextField
@@ -183,6 +193,7 @@ export default class CreateTask extends React.Component {
             className='createTaskButton'
             variant="contained"
             color="primary"
+            disabled={!this.validateForm()}
             onClick={() => this.props.save({...this.state})}>
               Save
           </Button>
@@ -196,7 +207,7 @@ export default class CreateTask extends React.Component {
         showWeekdayPicker: false,
         showMonthDayPicker: false,
         showDatePicker: false,
-        recurranceTypes: ['once','weekly', 'monthly', 'yearly'],
+        recurranceTypes: ['once','weekly', 'monthly', 'yearly', 'inherit'],
         weekdays: ['S', 'M', 'T', 'W', 'TH', 'F', 'SA'],
         datePickerProps: {},
       }
@@ -239,9 +250,34 @@ export default class CreateTask extends React.Component {
             break;
           case 'yearly':
             ret.recurranceTypes = ['inherit'];
+          case 'inherit':
+              ret.recurranceTypes = ['inherit'];
             break;
         }
       }
       return ret;
+    }
+
+    validateForm = () => {
+      const {Name, Description, Duration, ChunkSize, Parent, Recurrance} = this.state;
+      return(
+        Name && Name.length > 0 && Name.length < 50
+        && Description.length < 400)
+        && (Parent.ID == 'root'
+          || (Duration <= this.calculateMaxDuration()
+            && (Parent.Recurrance.Type == 'once' || Recurrance.Type == 'inherit'
+            )
+          )
+        )
+        && Duration >= ChunkSize;
+        
+    }
+
+    calculateMaxDuration = () => {
+      const Parent = this.state.Parent;
+      const otherChildrenDurationSum = Parent.Children.map(child => {
+        return child.ID != this.state.ID ? child.Duration : 0
+      }).reduce((a, b) => a + b, 0);
+      return Parent.Duration ? Parent.Duration - otherChildrenDurationSum : '';
     }
   }

@@ -37,6 +37,7 @@ const (
 type ChildTask struct {
 	ID        string
 	Name      string
+	Duration  int
 	TaskType  TaskType
 	Completed bool
 }
