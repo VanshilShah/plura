@@ -265,12 +265,13 @@ export default class CreateTask extends React.Component {
         && Description.length < 400)
         && (Parent.ID == 'root'
           || (Duration <= this.calculateMaxDuration()
-            && (Parent.Recurrance.Type == 'once' || Recurrance.Type == 'inherit'
-            )
-          )
+            && (Parent.Recurrance.Type == 'once' || Recurrance.Type == 'inherit'))
         )
+        && (Recurrance.Type == 'weekly' ? Object.keys(Recurrance.Weekdays).reduce((a, b) => {
+          return a || Recurrance.Weekdays[b]
+        }, false): true)
+        && (Recurrance.Type == 'monthly' ? Recurrance.MonthDay > 0 && Recurrance.MonthDay <= 31: true)
         && Duration >= ChunkSize;
-        
     }
 
     calculateMaxDuration = () => {
