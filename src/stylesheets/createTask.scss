@@ -47,6 +47,12 @@ div.createTaskActive{
   grid-column-start: 1;
 }
 
+.createTaskParent{
+  grid-column-end: 5;
+  grid-column-start: 3;
+  align-self: flex-end;
+}
+
 .cancelButton{
   grid-column-start: 5;
 }

@@ -149,6 +149,7 @@ class Dashboard extends React.Component {
                 active={createActive}
                 disactivate={() => this.setState({createActive: false})}
                 deleteTask={this.openDeleteTask}
+                tasks={this.state.tasks}
                 save={this.saveTask}/>
             </div>
         );

@@ -7,10 +7,12 @@ export default class TaskList extends React.Component {
   }
 
   render() {
+      const tasks = this.props.tasks;
+      const shouldRenderChildren = tasks != undefined;
       return (<Card className='taskList'>
           <div className='taskListHeader'>All Tasks</div>
           <div className='taskListContent'>
-            {this.props.tasks != undefined && this.renderChildren(this.props.tasks.root)}
+            {shouldRenderChildren && this.renderChildren(tasks.root)}
           </div>
       </Card>);
           
