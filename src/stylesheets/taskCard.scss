@@ -32,10 +32,6 @@
   @include padding($padding-s);
   @include grey-bg();
 }
-  
-.childTaskContainer{
-  
-}
 
 Button.childTask{
   // @include none();

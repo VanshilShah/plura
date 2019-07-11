@@ -27,6 +27,7 @@ button.taskListItemButton{
     text-transform: none;
     @include no-decor();
     width: -webkit-fill-available;
-    display: block;
+    display: flex;
+    justify-content: space-between;
     text-align: left;
 }

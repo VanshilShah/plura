@@ -65,8 +65,8 @@ export default class CreateTask extends React.Component {
       this.setState({Recurrance: {...Recurrance, Weekdays: {...Recurrance.Weekdays, [event.target.value]: event.target.checked}}});
     }
 
-    handleTextChange = (name, useInt=false) => event => {
-      this.setState({[name]: useInt ? parseInt(event.target.value) : event.target.value})
+    handleTextChange = (name, useNumber=false) => event => {
+      this.setState({[name]: useNumber ? parseFloat(event.target.value) : event.target.value})
     };
   
     
@@ -163,7 +163,7 @@ export default class CreateTask extends React.Component {
             id="duration"
             label="Duration (hours)"
             value={Duration}
-            inputProps={{ min: this.calculateMinDuration(), max: this.calculateMaxDuration(Parent), step: "1" }}
+            inputProps={{ min: this.calculateMinDuration(), max: this.calculateMaxDuration(Parent), step: 0.25 }}
             onChange={this.handleTextChange('Duration', true)}
             helperText={isChild || hasChildren ? 'Must be atleast ' + moment.duration(this.calculateMinDuration(), 'h').humanize() + ' and no more than ' + moment.duration(this.calculateMaxDuration(Parent), 'h').humanize() : 'Must be greater than chunk size'}
             type="number"
@@ -174,7 +174,7 @@ export default class CreateTask extends React.Component {
             value={ChunkSize}
             helperText="How long each chunk should be scheduled"
             onChange={this.handleTextChange('ChunkSize', true)}
-            inputProps={{ min: "0", max: Duration, step: "1" }}
+            inputProps={{ min: "0", max: Duration, step: "0.25" }}
             type="number"
           />
           <TextField

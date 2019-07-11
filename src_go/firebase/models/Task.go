@@ -37,18 +37,18 @@ const (
 type ChildTask struct {
 	ID        string
 	Name      string
-	Duration  int
+	Duration  float32
 	TaskType  TaskType
 	Completed bool
 }
 
 // Task represents a task
 type Task struct {
-	ID          string `firestore,json:"id,omitempty"`
-	Name        string `firestore,json:"name,omitempty"`
-	Description string `firestore:"description,omitempty"`
-	Duration    int    `firestore:"duration,omitempty"` // in minutes
-	ChunkSize   int    `firestore:"chunk,omitempty"`    // in minutes
+	ID          string  `firestore,json:"id,omitempty"`
+	Name        string  `firestore,json:"name,omitempty"`
+	Description string  `firestore:"description,omitempty"`
+	Duration    float32 `firestore:"duration,omitempty"` // in minutes
+	ChunkSize   float32 `firestore:"chunk,omitempty"`    // in minutes
 	Recurrance  struct {
 		Type     RecurranceType `firestore:"type,omitempty"`
 		Deadline time.Time      `firestore:"deadline,omitempty"`

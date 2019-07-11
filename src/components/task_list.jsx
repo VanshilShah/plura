@@ -1,5 +1,7 @@
 import { Button, Card } from '@material-ui/core';
+import moment from 'moment';
 import React from 'react';
+
 
 export default class TaskList extends React.Component {
   constructor(props) {
@@ -29,6 +31,7 @@ export default class TaskList extends React.Component {
         className='taskListItemButton'
         onClick={event => this.props.setActiveTask(child.ID)}>
         {child.Name}
+        <div>{moment.duration(child.Duration, 'h').humanize()}</div>
       </Button>
       {this.renderChildren(child)}
     </div>}))
