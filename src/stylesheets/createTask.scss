@@ -23,7 +23,7 @@ div.createTaskActive{
 
 .createTaskHeader{
   @include none();
-  @include accent-bg();
+  @include primary-bg();
   @include text-on-primary();
   @include padding($padding-m);
   display: flex;

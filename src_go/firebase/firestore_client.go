@@ -54,6 +54,9 @@ func GetTasks(ctx *gin.Context, client *firestore.Client) map[string]*models.Tas
 		tasks = append(tasks, (models.TaskFrom(doc)))
 	}
 	// fmt.Println(tasks)
+	if len(tasks) == 0 {
+		return InitializeUserTasks(ctx, client)
+	}
 	return buildTaskHeirarchy(tasks)
 }
 
@@ -76,13 +79,23 @@ func buildTaskHeirarchy(tasks []*models.Task) map[string]*models.Task {
 	return taskMap
 }
 
+// InitializeUserTasks initializes a user to have the default tasks
+func InitializeUserTasks(ctx *gin.Context, client *firestore.Client) map[string]*models.Task {
+	for _, task := range models.DefaultTasks {
+		_ = SaveTask(ctx, client, task)
+	}
+	return GetTasks(ctx, client)
+}
+
 // SaveTask saves a new task or updates an existing one
 func SaveTask(ctx *gin.Context, client *firestore.Client, task models.Task) bool {
 	fmt.Println(task)
 	var err error
 	task.Children = nil
 	task.Owner = getUserRef(ctx, client)
-	task.Parent = getUserTasksRef(ctx, client).Doc(task.Parent.ID)
+	if task.Parent != nil {
+		task.Parent = getUserTasksRef(ctx, client).Doc(task.Parent.ID)
+	}
 	if task.ID == "" {
 		_, _, err = getUserTasksRef(ctx, client).Add(ctx, task)
 	} else {
@@ -104,9 +117,11 @@ func DeleteTask(ctx *gin.Context, client *firestore.Client, task models.Task) bo
 			// Handle any errors in an appropriate way, such as returning them.
 			fmt.Println(err)
 		}
-		return false
 	}
 	_, err := getUserTasksRef(ctx, client).Doc(task.ID).Delete(ctx)
+	if err != nil {
+		fmt.Println(err)
+	}
 	return err == nil
 }
 

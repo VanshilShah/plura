@@ -77,7 +77,7 @@ export default class TaskCard extends React.Component {
           case 'weekly':
             return 'Every ' + Object.keys(recurrance.Weekdays).filter(key => recurrance.Weekdays[key]).join(', ');
           case 'monthly':
-            return 'Every ' + moment().startOf('year').add(recurrance.MonthDay, 'd').format('Do') + ' of the month';
+            return 'Every ' + moment().startOf('year').add((recurrance.MonthDay - 1), 'd').format('Do') + ' of the month';
           case 'yearly':
             return 'Every ' + moment(recurrance.YearDay).format('MMMM Do');
           case 'inherit':
