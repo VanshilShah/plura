@@ -21,6 +21,7 @@ div.taskList {
 
 div.taskListItem {
     margin-left: $margin-s;
+    border-left: 1px $accent solid;
 }
 
 button.taskListItemButton{
