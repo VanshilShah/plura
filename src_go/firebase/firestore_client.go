@@ -68,7 +68,9 @@ func buildTaskHeirarchy(tasks []*models.Task) map[string]*models.Task {
 	// update children fields
 	for _, task := range tasks {
 		if task.Parent != nil {
-			taskMap[task.Parent.ID].Children = append(taskMap[task.Parent.ID].Children, models.ChildTask{task.ID, task.Name, task.Duration, task.TaskType, task.Completed})
+			if parent, parentExists := taskMap[task.Parent.ID]; parentExists {
+				parent.Children = append(parent.Children, models.ChildTask{task.ID, task.Name, task.Duration, task.TaskType, task.Completed})
+			}
 		}
 	}
 	return taskMap
@@ -95,14 +97,16 @@ func SaveTask(ctx *gin.Context, client *firestore.Client, task models.Task) bool
 // DeleteTask deletes an existing task as well as all of its children tasks
 func DeleteTask(ctx *gin.Context, client *firestore.Client, task models.Task) bool {
 	fmt.Println(task)
-	_, err := getUserTasksRef(ctx, client).Doc(task.ID).Delete(ctx)
+
 	for _, childTask := range task.Children {
-		_, err = getUserTasksRef(ctx, client).Doc(childTask.ID).Delete(ctx)
+		_, err := getUserTasksRef(ctx, client).Doc(childTask.ID).Delete(ctx)
+		if err != nil {
+			// Handle any errors in an appropriate way, such as returning them.
+			fmt.Println(err)
+		}
+		return false
 	}
-	if err != nil {
-		// Handle any errors in an appropriate way, such as returning them.
-		fmt.Println(err)
-	}
+	_, err := getUserTasksRef(ctx, client).Doc(task.ID).Delete(ctx)
 	return err == nil
 }
 
